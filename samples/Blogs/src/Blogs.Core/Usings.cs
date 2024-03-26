@@ -1,0 +1,12 @@
+global using System.ComponentModel;
+global using System.Diagnostics.CodeAnalysis;
+global using System.Text.Json.Serialization;
+global using Blogs.Core.Domain.AggregatesModel.BlogAggregate;
+global using Blogs.Core.Domain.AggregatesModel.PersonAggregate;
+global using Blogs.Core.Domain.AggregatesModel.PostAggregate;
+global using BuildingBlocks.Aggregate;
+global using BuildingBlocks.Aggregate.Abstractions;
+global using BuildingBlocks.Exceptions;
+global using BuildingBlocks.Pagination;
+global using BuildingBlocks.Persistence.Abstractions;
+global using BuildingBlocks.Serialization.Converters;
