@@ -31,6 +31,7 @@ jobs:
             project:
                 - BuildingBlocks
                 - BuildingBlocks.Serialization
+                - BuildingBlocks.AspNetCore.Swashbuckle
 
     steps:
     - uses: actions/checkout@v3
