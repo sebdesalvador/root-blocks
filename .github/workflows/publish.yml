@@ -30,8 +30,9 @@ jobs:
         matrix:
             project:
                 - BuildingBlocks
-                - BuildingBlocks.Serialization
                 - BuildingBlocks.AspNetCore.Swashbuckle
+                - BuildingBlocks.Serialization
+                - BuildingBlocks.Serialization.Newtonsoft.Json
 
     steps:
     - uses: actions/checkout@v3
