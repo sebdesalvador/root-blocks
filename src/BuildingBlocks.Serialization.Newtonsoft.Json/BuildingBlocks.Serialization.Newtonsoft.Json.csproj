@@ -1,9 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <PackageId>Devware.BuildingBlocks.Serialization.Newtonsoft.Json</PackageId>
+        <Authors>Sébastien de Salvador</Authors>
+        <Description>Helper to add support for JSON Patch requests which currently not supported by System.Text.Json.</Description>
+        <Copyright>Copyright Sébastien de Salvador</Copyright>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,7 +26,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.2" />
+        <PackageReference Include="MinVer" Version="5.0.0" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

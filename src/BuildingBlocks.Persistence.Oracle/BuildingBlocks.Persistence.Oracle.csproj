@@ -1,10 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <PackageId>Devware.BuildingBlocks.Persistence.Oracle</PackageId>
+        <Authors>Sébastien de Salvador</Authors>
+        <Description>Adds Oracle as data provider for the connection factory in BuildingBlocks.Persistence.</Description>
+        <Copyright>Copyright Sébastien de Salvador</Copyright>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>12</LangVersion>
+        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,6 +27,11 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="MinVer" Version="5.0.0" PrivateAssets="All" />
         <PackageReference Include="CYQ.Data.Oracle" Version="5.9.2.7" />
     </ItemGroup>
 

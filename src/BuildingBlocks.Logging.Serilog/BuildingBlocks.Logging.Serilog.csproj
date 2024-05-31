@@ -1,10 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <PackageId>Devware.BuildingBlocks.Logging.Serilog</PackageId>
+        <Authors>Sébastien de Salvador</Authors>
+        <Description>Provides a Serilog implementation of the ILogContext from the BuildingBlocks library + a couple of easy to use Add methods to add easily add Serilog to projects without appsettings.json like Azure Functions.</Description>
+        <Copyright>Copyright Sébastien de Salvador</Copyright>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageId>BuildingBlocks.Logging.Serilog</PackageId>
+        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,9 +27,14 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+        <PackageReference Include="MinVer" Version="5.0.0" PrivateAssets="All" />
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
         <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
         <PackageReference Include="Serilog.Sinks.AzureAnalytics" Version="5.0.0" />
