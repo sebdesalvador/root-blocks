@@ -5,6 +5,7 @@
         <Authors>Sébastien de Salvador</Authors>
         <Description>Utilities and extensions for enhanced serialization in the BuildingBlocks library.</Description>
         <Copyright>Copyright Sébastien de Salvador</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>

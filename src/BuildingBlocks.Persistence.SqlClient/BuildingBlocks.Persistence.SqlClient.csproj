@@ -5,6 +5,7 @@
         <Authors>Sébastien de Salvador</Authors>
         <Description>Adds SqlClient as data provider for the connection factory in BuildingBlocks.Persistence.</Description>
         <Copyright>Copyright Sébastien de Salvador</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>netstandard2.1</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>

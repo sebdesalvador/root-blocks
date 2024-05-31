@@ -55,6 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution files", "solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		global.json = global.json
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelines", "pipelines", "{A12D2A87-94B6-40A8-8B82-E8F219826D50}"
