@@ -31,6 +31,15 @@ jobs:
             project:
                 - BuildingBlocks
                 - BuildingBlocks.AspNetCore.Swashbuckle
+                - BuildingBlocks.Logging.Serilog
+                - BuildingBlocks.Messaging.MediatR
+                - BuildingBlocks.Persistence
+                - BuildingBlocks.Persistence.EntityFramework
+                - BuildingBlocks.Persistence.MySqlClient
+                - BuildingBlocks.Persistence.Npgsql
+                - BuildingBlocks.Persistence.Oracle
+                - BuildingBlocks.Persistence.SqlClient
+                - BuildingBlocks.Persistence.SQLite
                 - BuildingBlocks.Serialization
                 - BuildingBlocks.Serialization.Newtonsoft.Json
 
