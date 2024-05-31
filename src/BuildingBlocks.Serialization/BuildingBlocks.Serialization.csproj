@@ -8,8 +8,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>BuildingBlocks.Serialization</AssemblyName>
-        <RootNamespace>BuildingBlocks.Serialization</RootNamespace>
         <LangVersion>12</LangVersion>
         <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
         <EnablePackageValidation>true</EnablePackageValidation>

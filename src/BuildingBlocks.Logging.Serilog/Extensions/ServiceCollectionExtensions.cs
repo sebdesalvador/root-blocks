@@ -42,7 +42,6 @@ public static class ServiceCollectionExtensions
                                                                     retainedFileCountLimit: 3,
                                                                     shared: true,
                                                                     flushToDiskInterval: TimeSpan.FromSeconds( 1 ) );
-               // config.ApplyAzureAnalyticsSinkSerializerWorkaround();
                var logger = config.CreateLogger();
                logging.AddSerilog( logger, dispose: true );
            } );

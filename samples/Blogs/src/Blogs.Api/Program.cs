@@ -22,7 +22,7 @@ try
     builder.Services
            .AddControllers( o =>
             {
-                // This is required to support PATCH requests
+                // This is required to support JSON PATCH requests
                 o.InputFormatters.Insert( 0, NewtonsoftJsonPatchInputFormatterHelper.GetJsonPatchInputFormatter() );
             } )
            .AddJsonOptions( o => o.JsonSerializerOptions.Converters.Add( new JsonStringEnumConverter() ) );
