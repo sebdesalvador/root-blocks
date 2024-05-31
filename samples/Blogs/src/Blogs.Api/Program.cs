@@ -15,7 +15,6 @@ try
     builder.Services.Configure< RouteOptions >( o => o.LowercaseUrls = true );
 
     // Services
-    builder.Services.AddOpenTelemetry().UseAzureMonitor();
     // builder.Services.AddLogContext();
     builder.Services.AddHealthChecks();
     builder.Services.AddCors( o => o.AddDefaultPolicy( b => b.WithOrigins( "http://localhost:4040" )
