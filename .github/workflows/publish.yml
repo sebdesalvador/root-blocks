@@ -29,19 +29,19 @@ jobs:
     strategy:
         matrix:
             project:
-                - BuildingBlocks
-                - BuildingBlocks.AspNetCore.Swashbuckle
-                - BuildingBlocks.Logging.Serilog
-                - BuildingBlocks.Messaging.MediatR
-                - BuildingBlocks.Persistence
-                - BuildingBlocks.Persistence.EntityFramework
-                - BuildingBlocks.Persistence.MySqlClient
-                - BuildingBlocks.Persistence.Npgsql
-                - BuildingBlocks.Persistence.Oracle
-                - BuildingBlocks.Persistence.SqlClient
-                - BuildingBlocks.Persistence.SQLite
-                - BuildingBlocks.Serialization
-                - BuildingBlocks.Serialization.Newtonsoft.Json
+                - RootBlocks
+                - RootBlocks.AspNetCore.Swashbuckle
+                - RootBlocks.Logging.Serilog
+                - RootBlocks.Messaging.MediatR
+                - RootBlocks.Persistence
+                - RootBlocks.Persistence.EntityFramework
+                - RootBlocks.Persistence.MySqlClient
+                - RootBlocks.Persistence.Npgsql
+                - RootBlocks.Persistence.Oracle
+                - RootBlocks.Persistence.SqlClient
+                - RootBlocks.Persistence.SQLite
+                - RootBlocks.Serialization
+                - RootBlocks.Serialization.Newtonsoft.Json
 
     steps:
     - uses: actions/checkout@v3

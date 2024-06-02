@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.Messaging.MediatR\BuildingBlocks.Messaging.MediatR.csproj" />
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.Persistence.EntityFramework\BuildingBlocks.Persistence.EntityFramework.csproj" />
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.Persistence.SqlClient\BuildingBlocks.Persistence.SqlClient.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.Messaging.MediatR\RootBlocks.Messaging.MediatR.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.Persistence.EntityFramework\RootBlocks.Persistence.EntityFramework.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.Persistence.SqlClient\RootBlocks.Persistence.SqlClient.csproj" />
         <ProjectReference Include="..\Blogs.Core\Blogs.Core.csproj" />
     </ItemGroup>
 

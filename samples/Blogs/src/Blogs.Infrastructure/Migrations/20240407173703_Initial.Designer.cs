@@ -248,7 +248,7 @@ namespace Blogs.Infrastructure.Migrations
                     b.ToTable("Tag", "dbo");
                 });
 
-            modelBuilder.Entity("BuildingBlocks.Messaging.OutboxItem", b =>
+            modelBuilder.Entity("RootBlocks.Messaging.OutboxItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");

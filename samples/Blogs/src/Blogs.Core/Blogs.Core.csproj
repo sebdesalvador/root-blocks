@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.Serialization\BuildingBlocks.Serialization.csproj" />
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks\BuildingBlocks.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.Serialization\RootBlocks.Serialization.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks\RootBlocks.csproj" />
     </ItemGroup>
 
 </Project>

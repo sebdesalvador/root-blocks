@@ -15,9 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.AspNetCore.Swashbuckle\BuildingBlocks.AspNetCore.Swashbuckle.csproj" />
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.Logging.Serilog\BuildingBlocks.Logging.Serilog.csproj" />
-        <ProjectReference Include="..\..\..\..\src\BuildingBlocks.Serialization.Newtonsoft.Json\BuildingBlocks.Serialization.Newtonsoft.Json.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.AspNetCore.Swashbuckle\RootBlocks.AspNetCore.Swashbuckle.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.Logging.Serilog\RootBlocks.Logging.Serilog.csproj" />
+        <ProjectReference Include="..\..\..\..\src\RootBlocks.Serialization.Newtonsoft.Json\RootBlocks.Serialization.Newtonsoft.Json.csproj" />
         <ProjectReference Include="..\Blogs.Application\Blogs.Application.csproj" />
         <ProjectReference Include="..\Blogs.Infrastructure\Blogs.Infrastructure.csproj" />
     </ItemGroup>
