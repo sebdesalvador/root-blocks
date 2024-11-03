@@ -27,7 +27,7 @@ public abstract class Identity : IEquatable< Identity >, IComparable< Identity >
 
     public override bool Equals( object? obj ) => obj is Identity identity && Equals( identity );
     public override int GetHashCode() => Value.GetHashCode();
-    public override string ToString() => $"{GetType().Name} [Id={Value}]";
+    public override string ToString() => Value.ToString();
 
     #endregion
 
