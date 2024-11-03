@@ -1,5 +1,8 @@
 ﻿namespace RootBlocks.Aggregate;
 
+/// <summary>
+/// Base class for domain events.
+/// </summary>
 public abstract class DomainEvent : INotification
 {
     public Guid Id { get; private set; } = Guid.NewGuid();

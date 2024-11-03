@@ -1,5 +1,8 @@
 ﻿namespace RootBlocks.Aggregate;
 
+/// <summary>
+/// Base class for enumerations.
+/// </summary>
 [ SuppressMessage(
     category: "Sonar",
     checkId: "S4035: Seal class 'Enumeration' or implement 'IEqualityComparer<T>' instead",

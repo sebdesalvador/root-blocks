@@ -1,5 +1,8 @@
 namespace RootBlocks.Aggregate;
 
+/// <summary>
+/// Base class for all identities.
+/// </summary>
 [ SuppressMessage(
     category: "Sonar",
     checkId: "S4035: Seal class 'Identity' or implement 'IEqualityComparer<T>' instead",
