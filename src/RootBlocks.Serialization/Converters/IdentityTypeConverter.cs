@@ -8,7 +8,7 @@ public class IdentityTypeConverter< T > : TypeConverter
 
     public override object? ConvertFrom( ITypeDescriptorContext? context, CultureInfo? culture, object value )
     {
-        var stringValue = value as string;
+        var stringValue = value.ToString();
 
         if ( string.IsNullOrWhiteSpace( stringValue ) || !Guid.TryParse( stringValue, out var guid ) )
             return base.ConvertFrom( context, culture, value );
