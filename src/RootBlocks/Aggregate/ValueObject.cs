@@ -1,5 +1,8 @@
 namespace RootBlocks.Aggregate;
 
+/// <summary>
+/// Base class for value objects.
+/// </summary>
 [ SuppressMessage(
     category: "Sonar",
     checkId: "S4035: Seal class 'ValueObject' or implement 'IEqualityComparer<T>' instead",

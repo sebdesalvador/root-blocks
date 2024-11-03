@@ -1,5 +1,9 @@
 namespace RootBlocks.Aggregate;
 
+/// <summary>
+/// Base class for entities.
+/// </summary>
+/// <typeparam name="T">The type of the identity of the entity.</typeparam>
 [ SuppressMessage(
     category: "Sonar",
     checkId: "S4035: Seal class 'Entity' or implement 'IEqualityComparer<T>' instead.",
