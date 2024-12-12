@@ -6,7 +6,7 @@
         <Description>Provides a MediatR implementation of the IEventPublisher from the RootBlocks library, mainly used to dispatch events internally.</Description>
         <Copyright>Copyright Sébastien de Salvador</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
@@ -27,13 +27,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MediatR" Version="12.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-        <PackageReference Include="MinVer" Version="5.0.0" PrivateAssets="All" />
+        <PackageReference Include="MediatR" Version="12.4.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>
