@@ -1,4 +1,5 @@
-﻿namespace RootBlocks.Aggregate;
+﻿// source: https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/enumeration-classes-over-enum-types
+namespace RootBlocks.Aggregate;
 
 /// <summary>
 /// Base class for enumerations.
