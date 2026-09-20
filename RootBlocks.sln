@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{002CACE4-66C2-4983-856A-9AB9E4AD9F2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RootBlocks", "src\RootBlocks\RootBlocks.csproj", "{7371CA03-7A26-4A6E-A6F5-0062C1D2744E}"
@@ -64,6 +65,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelines", "pipelines", "{
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RootBlocks.Tests", "test\RootBlocks.Tests\RootBlocks.Tests.csproj", "{AE3EEDB0-9810-4744-AB49-99AABDBBC369}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +95,7 @@ Global
 		{A903F83B-E4D7-464D-AA10-88FF8FEC597B} = {A206D6E1-BB7B-4EDD-BD69-3EA7763E0EB0}
 		{DC9AB518-628A-4C1C-8926-923EBF894382} = {92E70023-C9A2-440F-88CD-56FF72E28759}
 		{A12D2A87-94B6-40A8-8B82-E8F219826D50} = {E73C5D88-62EB-45F4-9F71-DEA1F2779A0D}
+		{AE3EEDB0-9810-4744-AB49-99AABDBBC369} = {11A0198A-298B-4F9D-B212-27EEBD8A9DEC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7371CA03-7A26-4A6E-A6F5-0062C1D2744E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -166,5 +170,9 @@ Global
 		{A903F83B-E4D7-464D-AA10-88FF8FEC597B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A903F83B-E4D7-464D-AA10-88FF8FEC597B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A903F83B-E4D7-464D-AA10-88FF8FEC597B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE3EEDB0-9810-4744-AB49-99AABDBBC369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE3EEDB0-9810-4744-AB49-99AABDBBC369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE3EEDB0-9810-4744-AB49-99AABDBBC369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE3EEDB0-9810-4744-AB49-99AABDBBC369}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -5,3 +5,5 @@ global using MediatR;
 global using RootBlocks.Aggregate;
 global using RootBlocks.Aggregate.Abstractions;
 global using RootBlocks.Exceptions;
+global using RootBlocks.Extensions;
+global using RootBlocks.Validation;
