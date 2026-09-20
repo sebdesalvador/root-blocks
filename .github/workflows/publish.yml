@@ -30,7 +30,7 @@ jobs:
         matrix:
             project:
                 - RootBlocks
-                - RootBlocks.AspNetCore.Swashbuckle
+                - RootBlocks.AspNetCore.OpenApi
                 - RootBlocks.Logging.Serilog
                 - RootBlocks.Messaging.MediatR
                 - RootBlocks.Persistence

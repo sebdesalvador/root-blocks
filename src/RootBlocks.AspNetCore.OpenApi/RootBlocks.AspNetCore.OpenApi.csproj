@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <PackageId>RootBlocks.AspNetCore.Swashbuckle</PackageId>
+        <PackageId>RootBlocks.AspNetCore.OpenApi</PackageId>
         <Authors>Sébastien de Salvador</Authors>
-        <Description>Provides Filters to render certain objects from the RootBlocks library correctly in Swagger.</Description>
+        <Description>OpenAPI document transformers rendering RootBlocks types correctly, for use with the built-in Microsoft.AspNetCore.OpenApi document generation and any UI (Scalar, Swagger UI, Redoc).</Description>
         <Copyright>Copyright Sébastien de Salvador</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>14</LangVersion>
-        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
+        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work;openapi;swagger;scalar</PackageTags>
         <EnablePackageValidation>true</EnablePackageValidation>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -24,6 +24,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="buildTransitive\RootBlocks.AspNetCore.OpenApi.props" Pack="true" PackagePath="buildTransitive\" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\RootBlocks\RootBlocks.csproj" />
     </ItemGroup>
 
@@ -33,7 +37,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="All" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
     </ItemGroup>
 
 </Project>

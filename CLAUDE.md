@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-RootBlocks is a collection of .NET NuGet packages providing DDD (Domain-Driven Design) building blocks to eliminate boilerplate and let developers focus on business logic. It targets `netstandard2.1` for the core package and the database drivers (RootBlocks.AspNetCore.Swashbuckle moved to `net10.0` with Swashbuckle 10), and `net10.0` for the integration packages, the sample and the tests. The SDK is pinned in `global.json`.
+RootBlocks is a collection of .NET NuGet packages providing DDD (Domain-Driven Design) building blocks to eliminate boilerplate and let developers focus on business logic. It targets `netstandard2.1` for the core package and the database drivers, and `net10.0` for the integration packages, the sample and the tests. The SDK is pinned in `global.json`.
 
 ## Commands
 
@@ -39,7 +39,7 @@ Versioning is handled automatically by **MinVer** using git tags prefixed with `
 | `RootBlocks.Messaging.MediatR` | MediatR implementation of `IEventPublisher` |
 | `RootBlocks.Serialization` / `.Newtonsoft.Json` | Domain event serialization |
 | `RootBlocks.Logging.Serilog` | Serilog integration |
-| `RootBlocks.AspNetCore.Swashbuckle` | Swagger/OpenAPI support |
+| `RootBlocks.AspNetCore.OpenApi` | OpenAPI document transformers for the built-in `AddOpenApi()` — UI-agnostic; the sample pairs it with Scalar |
 | `samples/Blogs` | Reference implementation using all packages together |
 
 ### Core DDD Primitives (`src/RootBlocks/Aggregate/`)
@@ -56,6 +56,16 @@ Versioning is handled automatically by **MinVer** using git tags prefixed with `
 - **`Extensions/`** — Extension methods over BCL types: `CollectionExtensions`, `DateTimeExtensions`, `StringExtensions`, `ValidationExtensions`, `GuidExtensions` (`Guid.ToIdentity<T>()`). Only add one here when it is not already in the BCL — don't reimplement `Take`, `Any` or `FirstOrDefault`.
 - **`Validation/ValidationResult`** — Immutable success/failure pair returned by `ValidateRequired`.
 - **`Resilience/Retry`** — Minimal retry helper with linear backoff. Reach for Polly instead when jitter, circuit breaking or per-exception policies are needed.
+
+### OpenAPI (`src/RootBlocks.AspNetCore.OpenApi/`)
+
+Transformers for the built-in `Microsoft.AspNetCore.OpenApi` generation — no Swashbuckle dependency, so any UI works.
+
+- **`IdentitySchemaTransformer`** — Renders `Identity` subclasses as `{"type":"string","format":"uuid"}`. Without it the generator sees the custom JSON converter, cannot infer a shape and emits an empty schema, which client generators read as `any`.
+- **`JsonPatchExampleTransformer`** — Attaches a worked example to `application/json-patch+json` bodies.
+- **`OpenApiOptionsExtensions.AddRootBlocks()`** — Registers both: `builder.Services.AddOpenApi( o => o.AddRootBlocks() );`
+
+The package ships `buildTransitive/*.props` opting consumers into the `Microsoft.AspNetCore.OpenApi.Generated` interceptors namespace; without it, any project with `GenerateDocumentationFile` fails to compile with CS9137. Projects referencing this one by **project** reference (the sample, the tests) must set `InterceptorsNamespaces` themselves, since buildTransitive assets only flow through package references.
 
 ### Persistence Layer (`src/RootBlocks.Persistence.EntityFramework/`)
 

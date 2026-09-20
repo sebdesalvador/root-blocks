@@ -28,29 +28,23 @@ try
            .AddJsonOptions( o => o.JsonSerializerOptions.Converters.Add( new JsonStringEnumConverter() ) );
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen( o =>
+    builder.Services.AddOpenApi( "v1", o =>
     {
-        o.SwaggerDoc( "v1", new OpenApiInfo
+        // Registers the RootBlocks transformers: strongly-typed ids as uuid strings, JSON Patch examples.
+        o.AddRootBlocks();
+        o.AddDocumentTransformer( ( document, _, _ ) =>
         {
-            Title = "Blogs API",
-            Description = "",
-            Version = "v0.0.0"
+            document.Info = new OpenApiInfo { Title = "Blogs API", Version = "v0.0.0" };
+            return Task.CompletedTask;
         } );
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine( AppContext.BaseDirectory, xmlFile );
-        o.IncludeXmlComments( xmlPath );
-        o.OperationFilter< JsonPatchDocumentFilter >();
-        o.SchemaFilter< IdentitySchemaFilter >();
-        o.UseAllOfForInheritance();
-        o.UseOneOfForPolymorphism();
-        o.CustomOperationIds( d =>
+        o.AddOperationTransformer( ( operation, context, _ ) =>
         {
-            if ( !d.TryGetMethodInfo( out var methodInfo ) )
-                throw new Exception( "Unable to get method info to generate operation ID." );
+            // Mirrors the camelCased operation ids Swashbuckle used to produce from the action name.
+            if ( context.Description.ActionDescriptor is ControllerActionDescriptor descriptor )
+                operation.OperationId = char.ToLowerInvariant( descriptor.ActionName[ 0 ] )
+                                      + descriptor.ActionName[ 1.. ];
 
-            var letters = methodInfo.Name.ToCharArray();
-            letters[ 0 ] = letters[ 0 ].ToString().ToLowerInvariant()[ 0 ];
-            return string.Join( "", letters );
+            return Task.CompletedTask;
         } );
     } );
     builder.Services.AddResponseCompression( o => o.Providers.Add< BrotliCompressionProvider >() );
@@ -62,14 +56,14 @@ try
     // app.UseLogsCorrelator();
     // app.UseGlobalExceptionHandling();
     // app.UseCorrelationHeaders();
-    app.UseSwagger();
-    app.UseSwaggerUI();
     app.UseHttpsRedirection();
     app.UseCors( p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod() );
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseResponseCompression();
     app.MapControllers();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
     app.MapHealthChecks( "/health" );
     app.Run();
 }

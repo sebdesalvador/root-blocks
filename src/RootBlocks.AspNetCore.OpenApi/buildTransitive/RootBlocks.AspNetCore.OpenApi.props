@@ -1,0 +1,13 @@
+<Project>
+
+    <PropertyGroup>
+        <!--
+          Microsoft.AspNetCore.OpenApi ships a source generator that lifts XML doc comments into the
+          document, and it emits interceptors. Without this namespace opted in, any project that
+          enables GenerateDocumentationFile fails to compile with CS9137. Setting it here spares
+          every consumer from discovering that themselves.
+        -->
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated</InterceptorsNamespaces>
+    </PropertyGroup>
+
+</Project>
