@@ -1,14 +1,27 @@
 namespace RootBlocks.AspNetCore.Swashbuckle.Swagger;
 
+/// <summary>
+/// Renders <see cref="Identity"/> subclasses as plain UUID strings instead of objects wrapping a
+/// <see cref="Guid"/>, matching how they are serialized on the wire.
+/// </summary>
 public class IdentitySchemaFilter : ISchemaFilter
 {
-    public void Apply( OpenApiSchema schema, SchemaFilterContext context )
+    #region Interface Implementations
+
+    /// <inheritdoc />
+    public void Apply( IOpenApiSchema schema, SchemaFilterContext context )
     {
         if ( !context.Type.IsSubclassOf( typeof( Identity ) ) )
             return;
 
-        schema.Type = "string";
-        schema.Format = "uuid";
-        schema.Properties?.Clear();
+        // Microsoft.OpenApi 2.x hands filters the read-only interface; only the concrete schema is mutable.
+        if ( schema is not OpenApiSchema mutableSchema )
+            return;
+
+        mutableSchema.Type = JsonSchemaType.String;
+        mutableSchema.Format = "uuid";
+        mutableSchema.Properties?.Clear();
     }
+
+    #endregion
 }

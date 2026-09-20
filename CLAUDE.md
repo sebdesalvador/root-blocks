@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-RootBlocks is a collection of .NET NuGet packages providing DDD (Domain-Driven Design) building blocks to eliminate boilerplate and let developers focus on business logic. It targets `netstandard2.1` for the core package and the database drivers, and `net10.0` for the integration packages, the sample and the tests. The SDK is pinned in `global.json`.
+RootBlocks is a collection of .NET NuGet packages providing DDD (Domain-Driven Design) building blocks to eliminate boilerplate and let developers focus on business logic. It targets `netstandard2.1` for the core package and the database drivers (RootBlocks.AspNetCore.Swashbuckle moved to `net10.0` with Swashbuckle 10), and `net10.0` for the integration packages, the sample and the tests. The SDK is pinned in `global.json`.
 
 ## Commands
 

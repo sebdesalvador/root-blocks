@@ -16,7 +16,7 @@ global using MediatR;
 global using Microsoft.AspNetCore.JsonPatch;
 global using Microsoft.AspNetCore.ResponseCompression;
 global using Microsoft.AspNetCore.Mvc;
-global using Microsoft.OpenApi.Models;
+global using Microsoft.OpenApi;
 global using RootBlocks.AspNetCore.Swashbuckle.Swagger;
 global using RootBlocks.Exceptions;
 global using RootBlocks.Pagination;
