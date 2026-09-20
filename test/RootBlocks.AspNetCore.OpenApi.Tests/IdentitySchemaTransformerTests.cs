@@ -44,5 +44,30 @@ public class IdentitySchemaTransformerTests( StronglyTypedIdsFixture fixture )
         Assert.False( content.TryGetProperty( "example", out _ ) );
     }
 
+    [ Fact ]
+    public void IdentityRouteParameter_IsAUuidString()
+    {
+        var schema = RouteParameter().GetProperty( "schema" );
+
+        // Parameters bound through TryParse never reach a schema transformer: the generator
+        // describes them from their binding source and settles for a bare string.
+        Assert.Equal( "string", schema.GetProperty( "type" ).GetString() );
+        Assert.Equal( "uuid", schema.GetProperty( "format" ).GetString() );
+    }
+
+    [ Fact ]
+    public void IdentityRouteParameter_IsStillRequired()
+    {
+        Assert.True( RouteParameter().GetProperty( "required" ).GetBoolean() );
+    }
+
+    private JsonElement RouteParameter() =>
+        fixture.Document.GetProperty( "paths" )
+               .GetProperty( "/blogs/{id}" )
+               .GetProperty( "get" )
+               .GetProperty( "parameters" )
+               .EnumerateArray()
+               .Single( p => p.GetProperty( "name" ).GetString() == "id" );
+
     private JsonElement Schemas() => fixture.Document.GetProperty( "components" ).GetProperty( "schemas" );
 }

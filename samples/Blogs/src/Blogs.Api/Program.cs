@@ -19,15 +19,13 @@ try
     builder.Services.AddHealthChecks();
     builder.Services.AddCors( o => o.AddDefaultPolicy( b => b.WithOrigins( "http://localhost:4040" )
                                                              .WithHeaders( "Authorization" ) ) );
-    builder.Services
-           .AddControllers( o =>
-            {
-                // This is required to support JSON PATCH requests
-                o.InputFormatters.Insert( 0, NewtonsoftJsonPatchInputFormatterHelper.GetJsonPatchInputFormatter() );
-            } )
-           .AddJsonOptions( o => o.JsonSerializerOptions.Converters.Add( new JsonStringEnumConverter() ) );
+    // AddControllers() used to register these implicitly; minimal APIs need them stated.
+    builder.Services.AddAuthentication();
+    builder.Services.AddAuthorization();
+    builder.Services.ConfigureHttpJsonOptions(
+        o => o.SerializerOptions.Converters.Add( new JsonStringEnumConverter() )
+    );
     builder.Services.AddHttpContextAccessor();
-    builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApi( "v1", o =>
     {
         o.AddStronglyTypedIds();
@@ -35,15 +33,6 @@ try
         o.AddDocumentTransformer( ( document, _, _ ) =>
         {
             document.Info = new OpenApiInfo { Title = "Blogs API", Version = "v0.0.0" };
-            return Task.CompletedTask;
-        } );
-        o.AddOperationTransformer( ( operation, context, _ ) =>
-        {
-            // Mirrors the camelCased operation ids Swashbuckle used to produce from the action name.
-            if ( context.Description.ActionDescriptor is ControllerActionDescriptor descriptor )
-                operation.OperationId = char.ToLowerInvariant( descriptor.ActionName[ 0 ] )
-                                      + descriptor.ActionName[ 1.. ];
-
             return Task.CompletedTask;
         } );
     } );
@@ -61,7 +50,9 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseResponseCompression();
-    app.MapControllers();
+    app.MapBlogEndpoints();
+    app.MapPersonEndpoints();
+    app.MapPostEndpoints();
     app.MapOpenApi();
     app.MapScalarApiReference();
     app.MapHealthChecks( "/health" );

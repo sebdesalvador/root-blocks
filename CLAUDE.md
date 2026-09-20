@@ -61,7 +61,8 @@ Versioning is handled automatically by **MinVer** using git tags prefixed with `
 
 Transformers for the built-in `Microsoft.AspNetCore.OpenApi` generation — no Swashbuckle dependency, so any UI works.
 
-- **`IdentitySchemaTransformer`** — Renders `Identity` subclasses as `{"type":"string","format":"uuid"}`. Without it the generator sees the custom JSON converter, cannot infer a shape and emits an empty schema, which client generators read as `any`.
+- **`IdentitySchemaTransformer`** — Renders `Identity` subclasses in **body schemas** as `{"type":"string","format":"uuid"}`. Without it the generator sees the custom JSON converter, cannot infer a shape and emits an empty schema, which client generators read as `any`.
+- **`IdentityParameterTransformer`** — Does the same for `Identity` **route and query parameters**. These never reach a schema transformer: a parameter bound through `TryParse` is described from its binding source, so the generator settles for a bare string. Both are registered by `AddStronglyTypedIds()`.
 - **`JsonPatchExampleTransformer`** — Attaches a worked example to `application/json-patch+json` bodies.
 - **`OpenApiOptionsExtensions`** — One extension per transformer, each named for what it does, so consumers take only what they want. There is deliberately no umbrella method: a new transformer gets its own named extension rather than silently joining a grab-bag.
 
@@ -88,7 +89,15 @@ The Blogs sample demonstrates the canonical project layout:
 - **Core** — domain model (aggregates, value objects, domain events, repository interfaces, read-model DTOs and query interfaces)
 - **Application** — CQRS commands and handlers (MediatR), no infrastructure references
 - **Infrastructure** — EF configurations, repository/UoW implementations, query implementations (raw SQL), DI registrations
-- **Api** — Controllers, request models, DI composition root
+- **Api** — Minimal API endpoint groups, request models, DI composition root
+
+The Api layer uses **minimal APIs, not MVC**: no controllers, no `AddControllers()`, no `MapControllers()`. Each aggregate gets an `Endpoints/XEndpoints.cs` with a `MapXEndpoints()` extension building a `MapGroup`, and `public static` handler methods.
+
+Two consequences worth knowing:
+- Handlers are `public`, not `private`, because the compiler only emits XML doc comments for visible members and .NET 10 lifts those into the OpenAPI document. Making them private silently strips every `summary` from the document.
+- Minimal APIs do not consult `TypeConverter`, so an `Identity` used as a route or query parameter needs a `TryParse`. Each id type declares a two-line one delegating to `Identity.TryCreate<T>`; without it the build fails with `ASP0020`.
+
+JSON Patch uses `Microsoft.AspNetCore.JsonPatch.SystemTextJson` — the Newtonsoft input formatter was MVC-only.
 
 ### Coding Conventions
 

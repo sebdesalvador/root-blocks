@@ -36,6 +36,7 @@ public abstract class OpenApiDocumentFixture : IAsyncLifetime
 
         app.MapOpenApi();
         app.MapPost( "/blogs", ( TestBlog blog ) => Results.Ok( blog ) );
+        app.MapGet( "/blogs/{id}", ( TestBlogId id ) => Results.Ok( id.Value ) );
         app.MapPatch( "/blogs/{id}", ( Guid id ) => Results.NoContent() )
            .Accepts< TestPatch >( JsonPatchExampleTransformer.JsonPatchMediaType );
 
@@ -62,7 +63,11 @@ public abstract class OpenApiDocumentFixture : IAsyncLifetime
 
     #region Nested Types
 
-    public class TestBlogId : Identity;
+    public class TestBlogId : Identity
+    {
+        public static bool TryParse( string? value, IFormatProvider? provider, out TestBlogId result )
+            => TryCreate( value, out result );
+    }
 
     public record TestBlog( TestBlogId Id, string Title );
 

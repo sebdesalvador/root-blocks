@@ -52,6 +52,20 @@ public class JsonPatchExampleTransformerTests( JsonPatchExamplesFixture fixture 
         Assert.False( schema.TryGetProperty( "format", out _ ) );
     }
 
+    [ Fact ]
+    public void AddJsonPatchExamples_LeavesIdentityRouteParametersUntouched()
+    {
+        var schema = fixture.Document.GetProperty( "paths" )
+                            .GetProperty( "/blogs/{id}" )
+                            .GetProperty( "get" )
+                            .GetProperty( "parameters" )
+                            .EnumerateArray()
+                            .Single( p => p.GetProperty( "name" ).GetString() == "id" )
+                            .GetProperty( "schema" );
+
+        Assert.False( schema.TryGetProperty( "format", out _ ) );
+    }
+
     private JsonElement PatchContent() =>
         fixture.Document.GetProperty( "paths" )
                .GetProperty( "/blogs/{id}" )

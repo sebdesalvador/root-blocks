@@ -5,6 +5,7 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using RootBlocks.Aggregate;
+global using RootBlocks.Extensions;
 global using Microsoft.AspNetCore.OpenApi;
 global using RootBlocks.AspNetCore.OpenApi.Extensions;
 global using Xunit;

@@ -23,6 +23,42 @@ public abstract class Identity : IEquatable< Identity >, IComparable< Identity >
 
     #endregion
 
+    #region Public Methods
+
+    /// <summary>
+    /// Builds an identity from its string form.
+    /// </summary>
+    /// <typeparam name="T">The concrete identity type to build.</typeparam>
+    /// <param name="value">The candidate value, expected to be a GUID. May be <c>null</c>.</param>
+    /// <param name="result">The identity when the value parsed; otherwise <c>null</c>.</param>
+    /// <returns><c>true</c> when the value parsed as a GUID; otherwise <c>false</c>.</returns>
+    /// <remarks>
+    /// Route and query binding in minimal APIs looks for a <c>TryParse</c> on the parameter type
+    /// itself, which a base class cannot supply because it has to return the concrete type. Declare
+    /// the two-line opt-in on each identity and let it delegate here:
+    /// <code>
+    /// public class BlogId : Identity
+    /// {
+    ///     public static bool TryParse( string? value, IFormatProvider? provider, out BlogId result )
+    ///         => TryCreate( value, out result );
+    /// }
+    /// </code>
+    /// </remarks>
+    public static bool TryCreate< T >( string? value, out T result )
+        where T : Identity
+    {
+        if ( Guid.TryParse( value, out var guid ) )
+        {
+            result = guid.ToIdentity< T >();
+            return true;
+        }
+
+        result = null!;
+        return false;
+    }
+
+    #endregion
+
     #region Overrides
 
     public override bool Equals( object? obj ) => obj is Identity identity && Equals( identity );
