@@ -1,14 +1,24 @@
 namespace RootBlocks.AspNetCore.OpenApi.Tests;
 
 /// <summary>
-/// Boots a minimal application wired with <c>AddRootBlocks()</c> and captures the document it
-/// generates, so the tests assert against the real pipeline rather than a transformer in isolation.
+/// Boots a minimal application and captures the document it generates, so the tests assert against
+/// the real pipeline rather than a transformer in isolation.
 /// </summary>
-public sealed class OpenApiDocumentFixture : IAsyncLifetime
+/// <remarks>
+/// Each concrete fixture opts into a single extension, which lets every test class prove both that
+/// its own transformer works and that it did not need the other one registered.
+/// </remarks>
+public abstract class OpenApiDocumentFixture : IAsyncLifetime
 {
     #region Properties
 
     public JsonElement Document { get; private set; }
+
+    #endregion
+
+    #region Abstract Members
+
+    protected abstract void Configure( OpenApiOptions options );
 
     #endregion
 
@@ -20,7 +30,7 @@ public sealed class OpenApiDocumentFixture : IAsyncLifetime
 
         builder.WebHost.UseUrls( "http://127.0.0.1:0" );
         builder.Logging.ClearProviders();
-        builder.Services.AddOpenApi( o => o.AddRootBlocks() );
+        builder.Services.AddOpenApi( Configure );
 
         var app = builder.Build();
 
@@ -35,8 +45,7 @@ public sealed class OpenApiDocumentFixture : IAsyncLifetime
         {
             using var client = new HttpClient();
 
-            var address = app.Urls.First();
-            var json = await client.GetStringAsync( $"{address}/openapi/v1.json" );
+            var json = await client.GetStringAsync( $"{app.Urls.First()}/openapi/v1.json" );
 
             Document = JsonDocument.Parse( json ).RootElement.Clone();
         }
@@ -60,4 +69,16 @@ public sealed class OpenApiDocumentFixture : IAsyncLifetime
     public record TestPatch( string Op, string Path, string Value );
 
     #endregion
+}
+
+/// <summary>A document generated with only <c>AddStronglyTypedIds()</c> registered.</summary>
+public sealed class StronglyTypedIdsFixture : OpenApiDocumentFixture
+{
+    protected override void Configure( OpenApiOptions options ) => options.AddStronglyTypedIds();
+}
+
+/// <summary>A document generated with only <c>AddJsonPatchExamples()</c> registered.</summary>
+public sealed class JsonPatchExamplesFixture : OpenApiDocumentFixture
+{
+    protected override void Configure( OpenApiOptions options ) => options.AddJsonPatchExamples();
 }

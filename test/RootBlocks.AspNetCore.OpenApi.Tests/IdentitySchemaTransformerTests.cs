@@ -1,7 +1,7 @@
 namespace RootBlocks.AspNetCore.OpenApi.Tests;
 
-[ Collection( nameof( OpenApiDocumentCollection ) ) ]
-public class IdentitySchemaTransformerTests( OpenApiDocumentFixture fixture )
+public class IdentitySchemaTransformerTests( StronglyTypedIdsFixture fixture )
+    : IClassFixture< StronglyTypedIdsFixture >
 {
     [ Fact ]
     public void IdentitySchema_IsAUuidString()
@@ -29,6 +29,19 @@ public class IdentitySchemaTransformerTests( OpenApiDocumentFixture fixture )
 
         Assert.Equal( "object", schema.GetProperty( "type" ).GetString() );
         Assert.True( schema.TryGetProperty( "properties", out _ ) );
+    }
+
+    [ Fact ]
+    public void AddStronglyTypedIds_DoesNotDragInTheJsonPatchExample()
+    {
+        var content = fixture.Document.GetProperty( "paths" )
+                             .GetProperty( "/blogs/{id}" )
+                             .GetProperty( "patch" )
+                             .GetProperty( "requestBody" )
+                             .GetProperty( "content" )
+                             .GetProperty( JsonPatchExampleTransformer.JsonPatchMediaType );
+
+        Assert.False( content.TryGetProperty( "example", out _ ) );
     }
 
     private JsonElement Schemas() => fixture.Document.GetProperty( "components" ).GetProperty( "schemas" );

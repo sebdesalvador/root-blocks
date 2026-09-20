@@ -63,7 +63,15 @@ Transformers for the built-in `Microsoft.AspNetCore.OpenApi` generation — no S
 
 - **`IdentitySchemaTransformer`** — Renders `Identity` subclasses as `{"type":"string","format":"uuid"}`. Without it the generator sees the custom JSON converter, cannot infer a shape and emits an empty schema, which client generators read as `any`.
 - **`JsonPatchExampleTransformer`** — Attaches a worked example to `application/json-patch+json` bodies.
-- **`OpenApiOptionsExtensions.AddRootBlocks()`** — Registers both: `builder.Services.AddOpenApi( o => o.AddRootBlocks() );`
+- **`OpenApiOptionsExtensions`** — One extension per transformer, each named for what it does, so consumers take only what they want. There is deliberately no umbrella method: a new transformer gets its own named extension rather than silently joining a grab-bag.
+
+  ```csharp
+  builder.Services.AddOpenApi( o =>
+  {
+      o.AddStronglyTypedIds();
+      o.AddJsonPatchExamples();
+  } );
+  ```
 
 The package ships `buildTransitive/*.props` opting consumers into the `Microsoft.AspNetCore.OpenApi.Generated` interceptors namespace; without it, any project with `GenerateDocumentationFile` fails to compile with CS9137. Projects referencing this one by **project** reference (the sample, the tests) must set `InterceptorsNamespaces` themselves, since buildTransitive assets only flow through package references.
 

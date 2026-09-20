@@ -30,8 +30,8 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApi( "v1", o =>
     {
-        // Registers the RootBlocks transformers: strongly-typed ids as uuid strings, JSON Patch examples.
-        o.AddRootBlocks();
+        o.AddStronglyTypedIds();
+        o.AddJsonPatchExamples();
         o.AddDocumentTransformer( ( document, _, _ ) =>
         {
             document.Info = new OpenApiInfo { Title = "Blogs API", Version = "v0.0.0" };
