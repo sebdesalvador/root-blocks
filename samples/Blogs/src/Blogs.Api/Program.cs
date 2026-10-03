@@ -28,7 +28,7 @@ try
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddOpenApi( "v1", o =>
     {
-        o.AddStronglyTypedIds();
+        o.AddStronglyTypedIdentifiers();
         o.AddJsonPatchExamples();
         o.AddDocumentTransformer( ( document, _, _ ) =>
         {

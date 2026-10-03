@@ -19,14 +19,14 @@ public class Comment : Entity< CommentId >
         }
     }
 
-    public PersonId AuthorId { get; set; } = null!;
-    public PostId PostId { get; set; } = null!;
+    public PersonId AuthorId { get; set; }
+    public PostId PostId { get; set; }
     public virtual Post Post { get; } = null!;
 
     protected Comment( string content ) => Content = content;
 
     public Comment( Post post, PersonId authorId, string content )
-        : this( content )
+        : base( CommentId.New() )
     {
         Post = post;
         PostId = post.Id;

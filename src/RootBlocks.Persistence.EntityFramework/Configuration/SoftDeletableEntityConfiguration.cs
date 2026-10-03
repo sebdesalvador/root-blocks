@@ -1,8 +1,8 @@
 namespace RootBlocks.Persistence.EntityFramework.Configuration;
 
-public abstract class SoftDeletableEntityConfiguration< TEntity, TIdentity > : EntityConfiguration< TEntity, TIdentity >
-    where TEntity : Entity< TIdentity >
-    where TIdentity : Identity, new()
+public abstract class SoftDeletableEntityConfiguration< TEntity, TId > : EntityConfiguration< TEntity, TId >
+    where TEntity : Entity< TId >
+    where TId : IEquatable< TId >
 {
     public override void Configure( EntityTypeBuilder< TEntity > builder )
     {
