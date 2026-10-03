@@ -11,10 +11,8 @@ public class CommentConfiguration : EntityConfiguration< Comment, CommentId >
                .HasMaxLength( 1024 )
                .IsRequired();
         builder.Property( c => c.AuthorId )
-               .HasConversion( new IdentityToGuidConverter< PersonId >() )
                .IsRequired();
         builder.Property( c => c.PostId )
-               .HasConversion( new IdentityToGuidConverter< PostId >() )
                .IsRequired();
 
         builder.HasOne< Person >()

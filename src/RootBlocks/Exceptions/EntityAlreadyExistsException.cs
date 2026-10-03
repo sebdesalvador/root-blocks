@@ -16,6 +16,6 @@ public class EntityAlreadyExistsException< T > : EntityException< T >
     public EntityAlreadyExistsException( string propertyName, string propertyValue, Exception? innerException = null )
         : base( ERROR_MESSAGE_WITH_TYPE_AND_ID, propertyName, propertyValue, innerException ) { }
 
-    public EntityAlreadyExistsException( string propertyName, Identity propertyValue, Exception? innerException = null )
-        : base( ERROR_MESSAGE_WITH_TYPE_AND_ID, propertyName, propertyValue.ToString(), innerException ) { }
+    public EntityAlreadyExistsException( string propertyName, object propertyValue, Exception? innerException = null )
+        : base( ERROR_MESSAGE_WITH_TYPE_AND_ID, propertyName, propertyValue.ToString() ?? string.Empty, innerException ) { }
 }

@@ -44,8 +44,7 @@ Versioning is handled automatically by **MinVer** using git tags prefixed with `
 
 ### Core DDD Primitives (`src/RootBlocks/Aggregate/`)
 
-- **`Identity`** — Abstract base for strongly-typed IDs (wraps a `Guid`). Subclass with `new()` constraint so EF can instantiate them.
-- **`Entity<T>`** — Abstract base for entities; holds `DomainEvents`, `CreatedOn`, `LastModifiedOn`, and an `Id` of type `T : Identity`.
+- **`Entity<T>`** — Abstract base for entities; holds `DomainEvents`, `CreatedOn`, `LastModifiedOn`, and an `Id` of type `T : IEquatable<T>`, passed to the `protected Entity( T id )` constructor. RootBlocks ships no identifier type: strongly-typed IDs come from the separate [StronglyTypedIdentifier](https://github.com/sebdesalvador/StronglyTypedIdentifier) package, and nothing for them (types, converters, OpenAPI transformers) belongs here.
 - **`IAggregateRoot`** — Marker interface; only aggregate roots are registered with the `UnitOfWork`.
 - **`ValueObject`** — Structural equality via `GetAtomicValues()`.
 - **`Enumeration`** — GUID-based alternative to C# enums with `GetAll<T>()`, `FromValue<T>()`, `FromDisplayName<T>()`.
@@ -53,7 +52,7 @@ Versioning is handled automatically by **MinVer** using git tags prefixed with `
 
 ### Helpers (`src/RootBlocks/`)
 
-- **`Extensions/`** — Extension methods over BCL types: `CollectionExtensions`, `DateTimeExtensions`, `StringExtensions`, `ValidationExtensions`, `GuidExtensions` (`Guid.ToIdentity<T>()`). Only add one here when it is not already in the BCL — don't reimplement `Take`, `Any` or `FirstOrDefault`.
+- **`Extensions/`** — Extension methods over BCL types: `CollectionExtensions`, `DateTimeExtensions`, `StringExtensions`, `ValidationExtensions`. Only add one here when it is not already in the BCL — don't reimplement `Take`, `Any` or `FirstOrDefault`.
 - **`Validation/ValidationResult`** — Immutable success/failure pair returned by `ValidateRequired`.
 - **`Resilience/Retry`** — Minimal retry helper with linear backoff. Reach for Polly instead when jitter, circuit breaking or per-exception policies are needed.
 
@@ -61,15 +60,12 @@ Versioning is handled automatically by **MinVer** using git tags prefixed with `
 
 Transformers for the built-in `Microsoft.AspNetCore.OpenApi` generation — no Swashbuckle dependency, so any UI works.
 
-- **`IdentitySchemaTransformer`** — Renders `Identity` subclasses in **body schemas** as `{"type":"string","format":"uuid"}`. Without it the generator sees the custom JSON converter, cannot infer a shape and emits an empty schema, which client generators read as `any`.
-- **`IdentityParameterTransformer`** — Does the same for `Identity` **route and query parameters**. These never reach a schema transformer: a parameter bound through `TryParse` is described from its binding source, so the generator settles for a bare string. Both are registered by `AddStronglyTypedIds()`.
 - **`JsonPatchExampleTransformer`** — Attaches a worked example to `application/json-patch+json` bodies.
 - **`OpenApiOptionsExtensions`** — One extension per transformer, each named for what it does, so consumers take only what they want. There is deliberately no umbrella method: a new transformer gets its own named extension rather than silently joining a grab-bag.
 
   ```csharp
   builder.Services.AddOpenApi( o =>
   {
-      o.AddStronglyTypedIds();
       o.AddJsonPatchExamples();
   } );
   ```
@@ -81,7 +77,7 @@ The package ships `buildTransitive/*.props` opting consumers into the `Microsoft
 - **`DatabaseContext`** — Base EF `DbContext` that auto-sets `CreatedOn`/`LastModifiedOn`, detaches `Enumeration` entries from the tracker, handles soft-delete (sets `DeletedOn` instead of removing rows), and applies UTC datetime converters.
 - **`DatabaseContextWithOutbox`** — Extends `DatabaseContext` with a `DbSet<OutboxItem>` for the outbox pattern.
 - **`UnitOfWork`** — Implements the UoW pattern. On `Commit`/`CommitAsync`: saves domain events to the outbox (or local list), persists, then publishes via `IEventPublisher`. Throws `ConcurrencyException` if rows were expected to change but didn't.
-- **`EntityConfiguration<TEntity, TIdentity>`** — Base EF configuration that maps `Id` via `IdentityToGuidConverter`, sets the concurrency token (`RowVersion`), ignores `DomainEvents`, and auto-names the table to the entity type name.
+- **`EntityConfiguration<TEntity, TIdentity>`** — Base EF configuration that marks `Id` as never generated, sets the concurrency token (`RowVersion`), ignores `DomainEvents`, and auto-names the table to the entity type name.
 
 ### Key Patterns Used in the Sample (`samples/Blogs/`)
 
@@ -93,9 +89,9 @@ The Blogs sample demonstrates the canonical project layout:
 
 The Api layer uses **minimal APIs, not MVC**: no controllers, no `AddControllers()`, no `MapControllers()`. Each aggregate gets an `Endpoints/XEndpoints.cs` with a `MapXEndpoints()` extension building a `MapGroup`, and `public static` handler methods.
 
-Two consequences worth knowing:
+Worth knowing:
 - Handlers are `public`, not `private`, because the compiler only emits XML doc comments for visible members and .NET 10 lifts those into the OpenAPI document. Making them private silently strips every `summary` from the document.
-- Minimal APIs do not consult `TypeConverter`, so an `Identity` used as a route or query parameter needs a `TryParse`. Each id type declares a two-line one delegating to `Identity.TryCreate<T>`; without it the build fails with `ASP0020`.
+- Ids are StronglyTypedIdentifier structs (`public partial struct BlogId : IStronglyTypedIdentifier< Guid >;`). The generated `TryParse` makes them bindable as route and query parameters; `UseStronglyTypedIdentifiers()` in `Context.ConfigureConventions` maps them in EF, and `AddStronglyTypedIdentifiers()` describes them in OpenAPI.
 
 JSON Patch uses `Microsoft.AspNetCore.JsonPatch.SystemTextJson` — the Newtonsoft input formatter was MVC-only.
 

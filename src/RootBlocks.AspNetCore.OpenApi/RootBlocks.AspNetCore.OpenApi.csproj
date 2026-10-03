@@ -3,14 +3,14 @@
     <PropertyGroup>
         <PackageId>RootBlocks.AspNetCore.OpenApi</PackageId>
         <Authors>Sébastien de Salvador</Authors>
-        <Description>OpenAPI document transformers rendering RootBlocks types correctly, for use with the built-in Microsoft.AspNetCore.OpenApi document generation and any UI (Scalar, Swagger UI, Redoc).</Description>
+        <Description>OpenAPI document transformers (JSON Patch examples) for the built-in Microsoft.AspNetCore.OpenApi document generation and any UI (Scalar, Swagger UI, Redoc).</Description>
         <Copyright>Copyright Sébastien de Salvador</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>14</LangVersion>
-        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work;openapi;swagger;scalar</PackageTags>
+        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;outbox;repository;unit-of-work;openapi;swagger;scalar</PackageTags>
         <EnablePackageValidation>true</EnablePackageValidation>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS1591</NoWarn>

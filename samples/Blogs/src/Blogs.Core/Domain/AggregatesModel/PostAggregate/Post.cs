@@ -42,7 +42,7 @@ public class Post : Entity< PostId >, IAggregateRoot
 
     public DateTime? PublishedOn => _publishedOn;
     public DateTime? ArchivedOn => _archivedOn;
-    public BlogId BlogId { get; private set; } = null!;
+    public BlogId BlogId { get; private set; }
     public Guid PostStatusId { get; private set; }
 
     public virtual PostStatus PostStatus
@@ -59,6 +59,7 @@ public class Post : Entity< PostId >, IAggregateRoot
     public virtual IReadOnlyCollection< Tag > Tags => _tags.AsReadOnly();
 
     public Post( BlogId blogId, string title, string content )
+        : base( PostId.New() )
     {
         PostStatus = PostStatus.Draft;
         BlogId = blogId;

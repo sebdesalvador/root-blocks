@@ -8,7 +8,7 @@ public record CreatePostRequestBody
     /// <summary>
     /// The identifier of the blog the post belongs to.
     /// </summary>
-    public BlogId BlogId { get; set; } = null!;
+    public BlogId BlogId { get; set; }
 
     /// <summary>
     /// The title of the post.

@@ -16,6 +16,6 @@ public class EntityNotFoundException< T > : EntityException< T >
     public EntityNotFoundException( string propertyName, string propertyValue, Exception? innerException = null )
         : base( ERROR_MESSAGE_WITH_TYPE_AND_ID, propertyName, propertyValue, innerException ) { }
 
-    public EntityNotFoundException( string propertyName, Identity propertyValue, Exception? innerException = null )
-        : base( ERROR_MESSAGE_WITH_TYPE_AND_ID, propertyName, propertyValue.ToString(), innerException ) { }
+    public EntityNotFoundException( string propertyName, object propertyValue, Exception? innerException = null )
+        : base( ERROR_MESSAGE_WITH_TYPE_AND_ID, propertyName, propertyValue.ToString() ?? string.Empty, innerException ) { }
 }
