@@ -28,12 +28,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25">
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="2.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-        <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+        <PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>
