@@ -15,11 +15,11 @@
 
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.1.89" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="10.0.12" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="10.0.13" />
     </ItemGroup>
 
 </Project>
