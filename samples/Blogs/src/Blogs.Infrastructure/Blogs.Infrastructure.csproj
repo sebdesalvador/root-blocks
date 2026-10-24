@@ -20,6 +20,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="10.0.13" />
+        <PackageReference Include="StronglyTypedIdentifier.EntityFrameworkCore" Version="0.2.0" />
     </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ public record CreateBlogRequestBody
     /// <summary>
     /// The identifier of the person owning the blog.
     /// </summary>
-    public PersonId OwnerId { get; set; } = null!;
+    public PersonId OwnerId { get; set; }
 
     /// <summary>
     /// An optional description of what the blog is about.

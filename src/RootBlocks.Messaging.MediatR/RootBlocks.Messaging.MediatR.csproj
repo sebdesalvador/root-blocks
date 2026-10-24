@@ -9,7 +9,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;strongly-typed-id;outbox;repository;unit-of-work</PackageTags>
+        <PackageTags>building-blocks;ddd;aggregate;aggregate-root;value-object;domain-event;outbox;repository;unit-of-work</PackageTags>
         <EnablePackageValidation>true</EnablePackageValidation>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS1591</NoWarn>

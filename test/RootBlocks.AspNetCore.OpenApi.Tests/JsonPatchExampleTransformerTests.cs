@@ -40,32 +40,6 @@ public class JsonPatchExampleTransformerTests( JsonPatchExamplesFixture fixture 
         Assert.False( content.TryGetProperty( "example", out _ ) );
     }
 
-    [ Fact ]
-    public void AddJsonPatchExamples_LeavesIdentitySchemasUntouched()
-    {
-        var schema = fixture.Document.GetProperty( "components" )
-                            .GetProperty( "schemas" )
-                            .GetProperty( nameof( OpenApiDocumentFixture.TestBlogId ) );
-
-        // The identity schema stays the empty one the generator falls back to, proving the two
-        // extensions are genuinely independent.
-        Assert.False( schema.TryGetProperty( "format", out _ ) );
-    }
-
-    [ Fact ]
-    public void AddJsonPatchExamples_LeavesIdentityRouteParametersUntouched()
-    {
-        var schema = fixture.Document.GetProperty( "paths" )
-                            .GetProperty( "/blogs/{id}" )
-                            .GetProperty( "get" )
-                            .GetProperty( "parameters" )
-                            .EnumerateArray()
-                            .Single( p => p.GetProperty( "name" ).GetString() == "id" )
-                            .GetProperty( "schema" );
-
-        Assert.False( schema.TryGetProperty( "format", out _ ) );
-    }
-
     private JsonElement PatchContent() =>
         fixture.Document.GetProperty( "paths" )
                .GetProperty( "/blogs/{id}" )

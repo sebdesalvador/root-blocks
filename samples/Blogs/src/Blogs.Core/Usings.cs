@@ -9,4 +9,4 @@ global using RootBlocks.Aggregate.Abstractions;
 global using RootBlocks.Exceptions;
 global using RootBlocks.Pagination;
 global using RootBlocks.Persistence.Abstractions;
-global using RootBlocks.Serialization.Converters;
+global using StronglyTypedIdentifier;

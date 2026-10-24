@@ -32,7 +32,7 @@ public class Blog : Entity< BlogId >, IAggregateRoot
         }
     }
 
-    public PersonId OwnerId { get; } = null!;
+    public PersonId OwnerId { get; }
 
     protected Blog( string title, string? description = null )
     {
@@ -41,6 +41,10 @@ public class Blog : Entity< BlogId >, IAggregateRoot
     }
 
     public Blog( string title, PersonId ownerId, string? description = null )
-        : this( title, description )
-        => OwnerId = ownerId;
+        : base( BlogId.New() )
+    {
+        Title = title;
+        Description = description;
+        OwnerId = ownerId;
+    }
 }

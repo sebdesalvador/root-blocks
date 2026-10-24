@@ -14,7 +14,6 @@ public class BlogConfiguration : EntityConfiguration< Blog, BlogId >
                .HasMaxLength( 1024 )
                .IsRequired( false );
         builder.Property( b => b.OwnerId )
-               .HasConversion( new IdentityToGuidConverter< PersonId >() )
                .IsRequired();
 
         builder.HasOne< Person >()

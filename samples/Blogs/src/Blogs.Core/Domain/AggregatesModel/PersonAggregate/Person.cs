@@ -49,6 +49,7 @@ public class Person : Entity< PersonId >, IAggregateRoot
     }
 
     public Person( string fullName, string emailAddress )
+        : base( PersonId.New() )
     {
         FullName = fullName;
         EmailAddress = emailAddress;
