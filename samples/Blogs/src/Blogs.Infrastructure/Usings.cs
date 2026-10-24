@@ -20,5 +20,5 @@ global using RootBlocks.Pagination;
 global using RootBlocks.Persistence.Abstractions;
 global using RootBlocks.Persistence.EntityFramework;
 global using RootBlocks.Persistence.EntityFramework.Configuration;
-global using RootBlocks.Persistence.EntityFramework.Converters;
 global using RootBlocks.Persistence.SqlClient.Extensions;
+global using StronglyTypedIdentifier.EntityFrameworkCore;

@@ -8,7 +8,7 @@ public record AddCommentRequestBody
     /// <summary>
     /// The identifier of the person writing the comment.
     /// </summary>
-    public PersonId AuthorId { get; set; } = null!;
+    public PersonId AuthorId { get; set; }
 
     /// <summary>
     /// The text of the comment.

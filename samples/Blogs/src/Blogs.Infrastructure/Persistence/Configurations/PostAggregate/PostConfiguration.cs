@@ -18,7 +18,6 @@ public class PostConfiguration : EntityConfiguration< Post, PostId >
         builder.Property( p => p.ArchivedOn )
                .IsRequired( false );
         builder.Property( p => p.BlogId )
-               .HasConversion( new IdentityToGuidConverter< BlogId >() )
                .IsRequired();
         builder.Property( p => p.PostStatusId )
                .IsRequired();

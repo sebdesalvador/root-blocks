@@ -23,3 +23,4 @@ global using RootBlocks.Pagination;
 global using Scalar.AspNetCore;
 global using Serilog;
 global using Serilog.Events;
+global using StronglyTypedIdentifier.AspNetCore;

@@ -4,10 +4,6 @@ namespace RootBlocks.AspNetCore.OpenApi.Tests;
 /// Boots a minimal application and captures the document it generates, so the tests assert against
 /// the real pipeline rather than a transformer in isolation.
 /// </summary>
-/// <remarks>
-/// Each concrete fixture opts into a single extension, which lets every test class prove both that
-/// its own transformer works and that it did not need the other one registered.
-/// </remarks>
 public abstract class OpenApiDocumentFixture : IAsyncLifetime
 {
     #region Properties
@@ -36,7 +32,6 @@ public abstract class OpenApiDocumentFixture : IAsyncLifetime
 
         app.MapOpenApi();
         app.MapPost( "/blogs", ( TestBlog blog ) => Results.Ok( blog ) );
-        app.MapGet( "/blogs/{id}", ( TestBlogId id ) => Results.Ok( id.Value ) );
         app.MapPatch( "/blogs/{id}", ( Guid id ) => Results.NoContent() )
            .Accepts< TestPatch >( JsonPatchExampleTransformer.JsonPatchMediaType );
 
@@ -63,23 +58,11 @@ public abstract class OpenApiDocumentFixture : IAsyncLifetime
 
     #region Nested Types
 
-    public class TestBlogId : Identity
-    {
-        public static bool TryParse( string? value, IFormatProvider? provider, out TestBlogId result )
-            => TryCreate( value, out result );
-    }
-
-    public record TestBlog( TestBlogId Id, string Title );
+    public record TestBlog( Guid Id, string Title );
 
     public record TestPatch( string Op, string Path, string Value );
 
     #endregion
-}
-
-/// <summary>A document generated with only <c>AddStronglyTypedIds()</c> registered.</summary>
-public sealed class StronglyTypedIdsFixture : OpenApiDocumentFixture
-{
-    protected override void Configure( OpenApiOptions options ) => options.AddStronglyTypedIds();
 }
 
 /// <summary>A document generated with only <c>AddJsonPatchExamples()</c> registered.</summary>

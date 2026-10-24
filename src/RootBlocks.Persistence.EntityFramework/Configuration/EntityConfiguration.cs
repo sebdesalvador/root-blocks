@@ -1,8 +1,16 @@
 ﻿namespace RootBlocks.Persistence.EntityFramework.Configuration;
 
-public abstract class EntityConfiguration< TEntity, TIdentity > : IEntityTypeConfiguration< TEntity >
-    where TEntity : Entity< TIdentity >
-    where TIdentity : Identity, new()
+/// <summary>
+/// Base configuration for entities: table name, key, audit columns, concurrency token.
+/// </summary>
+/// <remarks>
+/// The key is mapped as-is. When <typeparamref name="TId"/> is not a type EF maps natively, such as a
+/// strongly-typed identifier, its value conversion must come from a convention registered in
+/// <c>ConfigureConventions</c> (for instance StronglyTypedIdentifier's <c>UseStronglyTypedIdentifiers()</c>).
+/// </remarks>
+public abstract class EntityConfiguration< TEntity, TId > : IEntityTypeConfiguration< TEntity >
+    where TEntity : Entity< TId >
+    where TId : IEquatable< TId >
 {
     public virtual void Configure( EntityTypeBuilder< TEntity > builder )
     {
@@ -12,7 +20,6 @@ public abstract class EntityConfiguration< TEntity, TIdentity > : IEntityTypeCon
 
         builder.Property( e => e.Id )
                .ValueGeneratedNever()
-               .HasConversion( new IdentityToGuidConverter< TIdentity >() )
                .IsRequired();
         builder.Property( e => e.CreatedOn )
                .IsRequired();

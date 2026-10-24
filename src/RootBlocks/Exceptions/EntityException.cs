@@ -23,11 +23,11 @@ public abstract class EntityException< T > : Exception
             innerException
         ) { }
 
-    public EntityException( string message, string propertyName, Identity propertyValue, Exception? innerException = null )
+    public EntityException( string message, string propertyName, object propertyValue, Exception? innerException = null )
         : base(
             message.Replace( "{{Entity}}", typeof( T ).FullName )
                    .Replace( "{{PropertyName}}", propertyName )
-                   .Replace( "{{PropertyValue}}", propertyValue.Value.ToString() ),
+                   .Replace( "{{PropertyValue}}", propertyValue.ToString() ),
             innerException
         ) { }
 }
