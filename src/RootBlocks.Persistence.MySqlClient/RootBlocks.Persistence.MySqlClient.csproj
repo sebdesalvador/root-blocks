@@ -33,7 +33,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="All" />
-        <PackageReference Include="MySql.Data" Version="26.7.0" />
+        <PackageReference Include="MySql.Data" Version="26.10.0" />
     </ItemGroup>
 
 </Project>
