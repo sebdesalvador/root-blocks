@@ -1,0 +1,43 @@
+<Solution>
+  <Folder Name="/samples/" />
+  <Folder Name="/samples/Blogs/" />
+  <Folder Name="/samples/Blogs/src/">
+    <Project Path="samples/Blogs/src/Blogs.Api/Blogs.Api.csproj" />
+    <Project Path="samples/Blogs/src/Blogs.Application/Blogs.Application.csproj" />
+    <Project Path="samples/Blogs/src/Blogs.Core/Blogs.Core.csproj" />
+    <Project Path="samples/Blogs/src/Blogs.Infrastructure/Blogs.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/solution files/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CLAUDE.md" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/solution files/pipelines/">
+    <File Path=".github/workflows/publish.yml" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/RootBlocks.AspNetCore.OpenApi/RootBlocks.AspNetCore.OpenApi.csproj" />
+    <Project Path="src/RootBlocks.Logging.Serilog/RootBlocks.Logging.Serilog.csproj" />
+    <Project Path="src/RootBlocks.Messaging.MediatR/RootBlocks.Messaging.MediatR.csproj" />
+    <Project Path="src/RootBlocks.Persistence.EntityFramework/RootBlocks.Persistence.EntityFramework.csproj" />
+    <Project Path="src/RootBlocks.Persistence.MySqlClient/RootBlocks.Persistence.MySqlClient.csproj" />
+    <Project Path="src/RootBlocks.Persistence.Npgsql/RootBlocks.Persistence.Npgsql.csproj" />
+    <Project Path="src/RootBlocks.Persistence.Oracle/RootBlocks.Persistence.Oracle.csproj" />
+    <Project Path="src/RootBlocks.Persistence.SqlClient/RootBlocks.Persistence.SqlClient.csproj" />
+    <Project Path="src/RootBlocks.Persistence.SQLite/RootBlocks.Persistence.SQLite.csproj" />
+    <Project Path="src/RootBlocks.Persistence/RootBlocks.Persistence.csproj" />
+    <Project Path="src/RootBlocks.Serialization.Newtonsoft.Json/RootBlocks.Serialization.Newtonsoft.Json.csproj" />
+    <Project Path="src/RootBlocks.Serialization/RootBlocks.Serialization.csproj" />
+    <Project Path="src/RootBlocks/RootBlocks.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/RootBlocks.AspNetCore.OpenApi.Tests/RootBlocks.AspNetCore.OpenApi.Tests.csproj" />
+    <Project Path="test/RootBlocks.Serialization.Tests/RootBlocks.Serialization.Tests.csproj" />
+    <Project Path="test/RootBlocks.Tests/RootBlocks.Tests.csproj" />
+  </Folder>
+</Solution>
