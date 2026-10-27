@@ -1,5 +1,6 @@
 ﻿namespace RootBlocks.Persistence.EntityFramework.Configuration;
 
+[ Obsolete( "Maps the obsolete OutboxItem. Use modelBuilder.ApplyOutbox() instead." ) ]
 public class OutboxItemConfiguration : IEntityTypeConfiguration< OutboxItem >
 {
     public void Configure( EntityTypeBuilder< OutboxItem > builder )

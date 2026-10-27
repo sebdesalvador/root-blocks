@@ -2,6 +2,16 @@ namespace RootBlocks.Persistence.EntityFramework.Extensions;
 
 public static class ModelBuilderExtensions
 {
+    /// <summary>
+    /// Adds the transactional outbox to the model: an <see cref="OutboxMessage" /> table in the model's default
+    /// schema (set it with <c>HasDefaultSchema</c>). Any <see cref="DbContext" /> can call it, so each context of
+    /// a modular monolith gets its own outbox table in its own schema.
+    /// </summary>
+    public static ModelBuilder ApplyOutbox(
+        this ModelBuilder builder,
+        string tableName = OutboxMessageConfiguration.DEFAULT_TABLE_NAME
+    ) => builder.ApplyConfiguration( new OutboxMessageConfiguration( tableName ) );
+
     public static void AddDeletedOnToUniqueIndexes( this ModelBuilder builder )
     {
         foreach ( var entityType in builder.Model.GetEntityTypes() )

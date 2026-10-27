@@ -37,6 +37,7 @@
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/RootBlocks.AspNetCore.OpenApi.Tests/RootBlocks.AspNetCore.OpenApi.Tests.csproj" />
+    <Project Path="test/RootBlocks.Persistence.EntityFramework.Tests/RootBlocks.Persistence.EntityFramework.Tests.csproj" />
     <Project Path="test/RootBlocks.Serialization.Tests/RootBlocks.Serialization.Tests.csproj" />
     <Project Path="test/RootBlocks.Tests/RootBlocks.Tests.csproj" />
   </Folder>

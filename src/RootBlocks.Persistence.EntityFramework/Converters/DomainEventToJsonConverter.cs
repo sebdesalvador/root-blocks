@@ -1,5 +1,6 @@
 ﻿namespace RootBlocks.Persistence.EntityFramework.Converters;
 
+[ Obsolete( "Loses the properties of event subclasses and cannot read its own output back. OutboxMessage stores the type and the payload separately." ) ]
 public class DomainEventToJsonConverter : ValueConverter< DomainEvent, string >
 {
     public DomainEventToJsonConverter( ConverterMappingHints mappingHints = null )

@@ -1,0 +1,16 @@
+global using System.Collections.Concurrent;
+global using Microsoft.Data.SqlClient;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using Microsoft.EntityFrameworkCore.Storage;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Time.Testing;
+global using RootBlocks.Aggregate;
+global using RootBlocks.Aggregate.Abstractions;
+global using RootBlocks.Messaging.Abstractions;
+global using RootBlocks.Persistence.EntityFramework.Configuration;
+global using RootBlocks.Persistence.EntityFramework.Extensions;
+global using RootBlocks.Persistence.EntityFramework.Tests.Infrastructure;
+global using Testcontainers.MsSql;
+global using Xunit;
