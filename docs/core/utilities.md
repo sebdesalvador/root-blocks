@@ -160,7 +160,7 @@ RootBlocks does not ship an implementation of either interface. The usual approa
 
 Namespace: `RootBlocks.Messaging`
 
-`OutboxItem` wraps a `DomainEvent` for storage in the outbox table. Its `Id` is the event's `Id`. The EF package creates and maps these rows for you, so you rarely use this type directly. See [The outbox](../packages/entity-framework.md#the-outbox).
+Obsolete since 0.6. `OutboxItem` wrapped a `DomainEvent` for the 0.5 outbox table. The outbox now stores `OutboxMessage` rows from the EF package. See [The outbox](../packages/entity-framework.md#the-outbox).
 
 ## `ReflectionHelper`
 

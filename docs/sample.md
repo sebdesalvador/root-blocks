@@ -48,11 +48,11 @@ There is one command record and one handler per use case (`CreatePostCommand`, `
 
 ### Blogs.Infrastructure
 
-- `Context : DatabaseContextWithOutbox` applies every configuration in the assembly, and maps the strongly-typed IDs with `UseStronglyTypedIdentifiers()` in `ConfigureConventions`.
+- `Context : DatabaseContext` applies every configuration in the assembly and the outbox (`ApplyOutbox()`), and maps the strongly-typed IDs with `UseStronglyTypedIdentifiers()` in `ConfigureConventions`.
 - Configurations derive from `EntityConfiguration`. `Person` uses `SoftDeletableEntityConfiguration` (with a unique e-mail index that ignores deleted rows), `PostStatus` uses `EnumerationConfiguration`, and `Tag` uses `ValueObjectConfiguration`.
-- `UnitOfWork` derives from the RootBlocks `UnitOfWork`.
+- `UnitOfWork` derives from the RootBlocks `UnitOfWork` and takes the `OutboxPublisher`.
 - Repositories use EF. Queries use Dapper over `IConnectionFactory`, with multi-result SQL.
-- `AddInfrastructure( connectionString )` wires up `AddMessaging()`, `AddSqlClientPersistence()`, the context (with lazy-loading proxies), the unit of work, the repositories and the queries.
+- `AddInfrastructure( configuration )` wires up `AddMessaging()`, `AddSqlClientPersistence()`, the context (with lazy-loading proxies), `AddOutbox< Context >()`, the unit of work, the repositories and the queries.
 - `Migrations/` contains the initial migration. `DesignTimeContextFactory` derives from `DesignTimeDatabaseContextFactory`.
 
 ### Blogs.Api

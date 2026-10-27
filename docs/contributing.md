@@ -3,6 +3,7 @@
 ## Prerequisites
 
 - The .NET SDK pinned in [`global.json`](../global.json) (10.0.103, rolling forward to the latest feature band).
+- Docker, for the Entity Framework tests, which start SQL Server with Testcontainers.
 - SQL Server, only if you want to run the Blogs sample.
 
 ## Build and test
@@ -17,6 +18,7 @@ dotnet pack src/RootBlocks/RootBlocks.csproj --configuration Release
 | Test project | Covers |
 |--------------|--------|
 | `test/RootBlocks.Tests` | Extension methods, `ValidationResult`, `Retry` |
+| `test/RootBlocks.Persistence.EntityFramework.Tests` | The outbox: `UnitOfWork`, `OutboxDispatcher<T>` and `OutboxMessage`, against SQL Server in a container |
 | `test/RootBlocks.Serialization.Tests` | `DomainEventConverter<T>` |
 | `test/RootBlocks.AspNetCore.OpenApi.Tests` | `JsonPatchExampleTransformer`, against a real generated document |
 

@@ -178,7 +178,7 @@ public class TagConfiguration : ValueObjectConfiguration< Tag >
 ### The context
 
 ```csharp
-public sealed class Context( DbContextOptions options ) : DatabaseContextWithOutbox( options )
+public sealed class Context( DbContextOptions options ) : DatabaseContext( options )
 {
     public DbSet< Post > Posts { get; init; } = null!;
 
@@ -192,6 +192,7 @@ public sealed class Context( DbContextOptions options ) : DatabaseContextWithOut
     protected override void OnModelCreating( ModelBuilder modelBuilder )
     {
         modelBuilder.ApplyConfigurationsFromAssembly( Assembly.GetExecutingAssembly() );
+        modelBuilder.ApplyOutbox();           // an Outbox table in the context's schema
         base.OnModelCreating( modelBuilder ); // must run after your configurations
     }
 }
@@ -199,13 +200,13 @@ public sealed class Context( DbContextOptions options ) : DatabaseContextWithOut
 
 Call `base.OnModelCreating` after applying your configurations. The base method sets the UTC converters on every `DateTime` column and adds `DeletedOn` to unique indexes. It can only do that for entities that are already in the model.
 
-Use `DatabaseContext` instead of `DatabaseContextWithOutbox` if you do not want an `Outbox` table. See [Entity Framework persistence](packages/entity-framework.md#the-outbox) for the differences.
+Leave out `ApplyOutbox()` if you do not want an `Outbox` table; events are then published after the save, and lost if publishing fails. With it, register the dispatcher that retries them with `services.AddOutbox< Context >( configuration )`. See [The outbox](packages/entity-framework.md#the-outbox).
 
 ### The unit of work and the repository
 
 ```csharp
-public class UnitOfWork( Context context, IEventPublisher eventPublisher )
-    : RootBlocks.Persistence.EntityFramework.UnitOfWork( context, eventPublisher );
+public class UnitOfWork( Context context, IEventPublisher eventPublisher, OutboxPublisher outboxPublisher )
+    : RootBlocks.Persistence.EntityFramework.UnitOfWork( context, eventPublisher, outboxPublisher );
 
 public class PostRepository( Context context ) : IPostRepository
 {
@@ -285,7 +286,7 @@ public class PublishPostCommandHandler( IUnitOfWork unitOfWork, IPostRepository 
 }
 ```
 
-`CommitAsync` collects the aggregate's domain events, stores them in the outbox when the context has one, saves, and throws `ConcurrencyException` if no row changed. It then publishes each event through `IEventPublisher`.
+`CommitAsync` collects the aggregate's domain events, writes them to the outbox in the same save, and throws `ConcurrencyException` if no row changed. It then publishes each event through `IEventPublisher` and marks it processed. An event that fails to publish is recorded and retried by the dispatcher instead of failing the request. Delivery is at least once, so handlers must be idempotent.
 
 ## 7. React to the event
 

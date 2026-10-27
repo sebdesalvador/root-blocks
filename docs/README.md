@@ -23,6 +23,7 @@ Start with [Getting started](getting-started.md) if you are new to RootBlocks. I
 
 ## Reference
 
+- [Upgrading to 0.6](upgrading-to-0.6.md)
 - [Configuration reference](configuration.md)
 - [Target frameworks](target-frameworks.md)
 - [Contributing](contributing.md)
