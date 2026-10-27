@@ -1,7 +1,7 @@
 namespace Blogs.Infrastructure.Persistence;
 
 [ ExcludeFromCodeCoverage ]
-public sealed class Context( DbContextOptions options ) : DatabaseContextWithOutbox( options )
+public sealed class Context( DbContextOptions options ) : DatabaseContext( options )
 {
     public DbSet< Person > People { get; init; } = null!;
     public DbSet< Blog > Blogs { get; init; } = null!;
@@ -16,6 +16,7 @@ public sealed class Context( DbContextOptions options ) : DatabaseContextWithOut
     protected override void OnModelCreating( ModelBuilder modelBuilder )
     {
         modelBuilder.ApplyConfigurationsFromAssembly( Assembly.GetExecutingAssembly() );
+        modelBuilder.ApplyOutbox();
         base.OnModelCreating( modelBuilder );
     }
 }

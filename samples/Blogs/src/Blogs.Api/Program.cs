@@ -38,7 +38,7 @@ try
     } );
     builder.Services.AddResponseCompression( o => o.Providers.Add< BrotliCompressionProvider >() );
     builder.Services.AddApplication();
-    builder.Services.AddInfrastructure( builder.Configuration.GetConnectionString( "DefaultConnection" )! );
+    builder.Services.AddInfrastructure( builder.Configuration );
 
     // Middleware
     var app = builder.Build();

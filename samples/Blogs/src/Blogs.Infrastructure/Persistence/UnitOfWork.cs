@@ -1,8 +1,8 @@
 namespace Blogs.Infrastructure.Persistence;
 
 [ ExcludeFromCodeCoverage ]
-public class UnitOfWork( Context context, IEventPublisher eventPublisher )
-    : RootBlocks.Persistence.EntityFramework.UnitOfWork( context, eventPublisher )
+public class UnitOfWork( Context context, IEventPublisher eventPublisher, OutboxPublisher outboxPublisher )
+    : RootBlocks.Persistence.EntityFramework.UnitOfWork( context, eventPublisher, outboxPublisher )
 {
     // public override void RegisterDirty( IAggregateRoot aggregateRoot )
     // {
