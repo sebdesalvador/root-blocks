@@ -164,7 +164,7 @@ AddDomainEvent( new PostPublished( Id ) );
 
 `SetCorrelationIds( causationId, correlationId )` fills in the tracing IDs. You can also pass them through the `protected DomainEvent( Guid? causationId, Guid correlationId )` constructor. When an `IExecutionContext` is registered, the MediatR `EventPublisher` calls `SetCorrelationIds` for you just before publishing (see [Messaging](../packages/messaging-mediatr.md)).
 
-Events are collected and published by the unit of work when you commit. Raising an event does nothing else on its own. See [Entity Framework persistence](../packages/entity-framework.md#unit-of-work) for the exact sequence.
+Events are collected and published by the unit of work when you commit. Raising an event does nothing else on its own. See [Entity Framework persistence](../packages/entity-framework.md#unitofwork) for the exact sequence.
 
 ## Repositories and the unit of work
 
@@ -193,7 +193,7 @@ Repositories only load aggregates. To persist changes, register them with the `I
 | `Rollback()` | You want to revert the tracked, uncommitted changes in memory. |
 | `BeginTransaction[Async]()`, `CommitTransaction[Async]()`, `RollbackTransaction()` | You need to span several commits with one explicit database transaction. |
 
-The EF Core implementation and its edge cases are described in [Entity Framework persistence](../packages/entity-framework.md#unit-of-work).
+The EF Core implementation and its edge cases are described in [Entity Framework persistence](../packages/entity-framework.md#unitofwork).
 
 ## Exceptions
 

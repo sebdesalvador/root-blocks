@@ -7,7 +7,7 @@ This page lists every registration method, base class you must derive from, and 
 | Method | Package / namespace | Registers | Lifetime |
 |--------|---------------------|-----------|----------|
 | `AddMessaging()` | `RootBlocks.Messaging.MediatR.Extensions` | `IEventPublisher` → `EventPublisher` | Scoped |
-| `AddPersistence( connectionString, invariantName )` | `RootBlocks.Persistence.Extensions` | `IConnectionFactory` for any registered ADO.NET provider | Singleton |
+| `AddPersistence( connectionString, factoryName )` | `RootBlocks.Persistence.Extensions` | `IConnectionFactory` for any registered ADO.NET provider | Singleton |
 | `AddSqlClientPersistence( connectionString )` | `RootBlocks.Persistence.SqlClient.Extensions` | `IConnectionFactory` for SQL Server | Singleton |
 | `AddNpgsqlPersistence( connectionString )` | `RootBlocks.Persistence.Npgsql.Extensions` | `IConnectionFactory` for PostgreSQL | Singleton |
 | `AddMySqlClientPersistence( connectionString )` | `RootBlocks.Persistence.MySqlClient.Extensions` | `IConnectionFactory` for MySQL | Singleton |
