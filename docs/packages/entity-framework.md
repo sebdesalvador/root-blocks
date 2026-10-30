@@ -151,6 +151,18 @@ To find messages that gave up: `SELECT * FROM sales.Outbox WHERE ProcessedOn IS 
 
 The payload is written with `System.Text.Json`. Private setters and a private parameterless constructor are used when the event is read back, so the usual shape of a domain event works, and `Id`, `OccurredOn`, `CausationId` and `CorrelationId` keep their values. A property that has no setter at all must be a constructor parameter of the same name, or it is lost.
 
+## Exceptions
+
+Namespace: `RootBlocks.Persistence.EntityFramework.Exceptions`
+
+| Exception | Thrown when |
+|-----------|-------------|
+| `ConcurrencyException` | `Commit`/`CommitAsync` had changes to save and `SaveChanges` reported no affected rows. |
+| `DbUpdateConcurrencyException` (EF Core) | The `RowVersion` of a row changed since it was loaded: someone else saved it first. Reload the aggregate and retry, or report a conflict (HTTP 409). |
+| `NoCompatibleDatabaseContextFoundException`, `UnableToDeserializeDomainEventException` | Obsolete, no longer thrown. |
+
+The domain exceptions (`DomainException`, `EntityNotFoundException<T>`, ...) come from the core package; see [Domain model](../core/domain-model.md#exceptions).
+
 ## Design-time factory
 
 `DesignTimeDatabaseContextFactory< T >` builds the context for `dotnet ef` from `ConnectionStrings:DefaultConnection` in `appsettings.json`, `appsettings.{ASPNETCORE_ENVIRONMENT}.json`, `appsettings.Local.json` and the environment, using SQL Server.

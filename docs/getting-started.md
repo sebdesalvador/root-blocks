@@ -253,14 +253,21 @@ public class PostQueries( IConnectionFactory connectionFactory ) : IPostQueries
 ## 5. Register everything
 
 ```csharp
-public static IServiceCollection AddInfrastructure( this IServiceCollection services, string connectionString )
-    => services.AddMessaging()                               // IEventPublisher via MediatR
-               .AddSqlClientPersistence( connectionString )  // IConnectionFactory for SQL Server
-               .AddDbContext< Context >( o => o.UseSqlServer( connectionString ) )
-               .AddScoped< IUnitOfWork, UnitOfWork >()
-               .AddScoped< IPostRepository, PostRepository >()
-               .AddScoped< IPostQueries, PostQueries >();
+public static IServiceCollection AddInfrastructure( this IServiceCollection services, IConfiguration configuration )
+{
+    var connectionString = configuration.GetConnectionString( "DefaultConnection" )!;
+
+    return services.AddMessaging()                               // IEventPublisher via MediatR
+                   .AddSqlClientPersistence( connectionString )  // IConnectionFactory for SQL Server
+                   .AddDbContext< Context >( o => o.UseSqlServer( connectionString ) )
+                   .AddOutbox< Context >( configuration )        // OutboxPublisher + the dispatcher
+                   .AddScoped< IUnitOfWork, UnitOfWork >()
+                   .AddScoped< IPostRepository, PostRepository >()
+                   .AddScoped< IPostQueries, PostQueries >();
+}
 ```
+
+`AddOutbox< Context >` reads its options from the `Outbox` configuration section; the defaults are fine to start with. See [outbox options](packages/entity-framework.md#options).
 
 `AddMessaging()` registers the publisher but not MediatR itself. Register MediatR in the application layer, and make sure the assembly scan includes your notification handlers:
 
@@ -308,7 +315,7 @@ public class NotifySubscribersWhenPostPublished : INotificationHandler< PostPubl
 ```csharp
 var builder = WebApplication.CreateBuilder( args );
 builder.Services.AddMediatR( cfg => cfg.RegisterServicesFromAssembly( typeof( PublishPostCommand ).Assembly ) );
-builder.Services.AddInfrastructure( builder.Configuration.GetConnectionString( "DefaultConnection" )! );
+builder.Services.AddInfrastructure( builder.Configuration );
 
 var app = builder.Build();
 

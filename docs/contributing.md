@@ -60,4 +60,4 @@ The [`publish`](../.github/workflows/publish.yml) workflow runs on every pull re
 
 To release, tag the commit (`v1.2.3`) and publish a GitHub Release from that tag. Publishing the release uploads the packages to nuget.org, and that upload cannot be undone (packages can only be unlisted).
 
-When you add a new package, add it to the matrix in `publish.yml`, to `RootBlocks.slnx`, to the package table in the [README](../README.md), and to [Target frameworks](target-frameworks.md).
+When you add a new package, add it to the matrix in `publish.yml`, to `RootBlocks.slnx`, to the package table in the [README](../README.md), to [Target frameworks](target-frameworks.md) and to the [Configuration reference](configuration.md), and give it a page under `docs/packages/` linked from [docs/README.md](README.md).
