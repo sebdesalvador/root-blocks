@@ -54,7 +54,7 @@ Commit messages follow [Conventional Commits](https://www.conventionalcommits.or
 
 The [`release`](../.github/workflows/release.yml) workflow runs on every pull request, every push to `main`, and every published GitHub Release:
 
-1. **create_nuget** packs every package in a matrix and uploads each `.nupkg` and `.snupkg` as an artifact.
+1. **create_nuget** packs every package in a matrix and uploads each `.nupkg` as an artifact. There are no symbol packages: the PDB is embedded in each DLL, with Source Link, so debuggers step into the code without one.
 2. **run_test** runs `dotnet test --configuration Release`.
 3. **deploy** runs **only when a GitHub Release is published**. It pushes every package to nuget.org with `--skip-duplicate`, the core `RootBlocks` package last, so a rejected push never leaves the core package of a version out on its own.
 
