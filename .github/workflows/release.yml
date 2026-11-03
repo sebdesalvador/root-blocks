@@ -64,9 +64,9 @@ jobs:
         name: nuget-${{ matrix.project }}
         if-no-files-found: error
         retention-days: 7
-        path: |
-          ${{ env.NuGetDirectory }}/*.nupkg
-          ${{ env.NuGetDirectory }}/*.snupkg
+        # No .snupkg: DotNet.ReproducibleBuilds embeds the PDB in each DLL, so a symbol package would hold
+        # no .pdb and nuget.org rejects it with a 400.
+        path: ${{ env.NuGetDirectory }}/*.nupkg
 
   run_test:
     runs-on: ubuntu-latest
@@ -123,7 +123,6 @@ jobs:
       # every other package depends on the core one: if a push is rejected, it happens before the
       # core package of that version is out on its own. nuget.org does not require a dependency to
       # exist yet. --skip-duplicate lets a retried workflow skip packages that already made it.
-      # The symbol package next to each .nupkg is pushed automatically.
       - name: Publish NuGet packages
         run: |
           $files = @(Get-ChildItem "${{ env.NuGetDirectory }}" -Filter *.nupkg | Sort-Object { $_.Name -match '^RootBlocks\.\d' }, Name)
