@@ -14,8 +14,12 @@ public class OutboxOptions
 
     #region Properties
 
-    /// <summary>How often <see cref="OutboxDispatcher{TContext}" /> looks for messages to publish.</summary>
-    public TimeSpan PollInterval { get; set; } = TimeSpan.FromSeconds( 5 );
+    /// <summary>
+    /// The longest <see cref="OutboxDispatcher{TContext}" /> sleeps between two looks at the table. It wakes
+    /// earlier when a message falls due or this process leaves one behind, so this only bounds how late it finds
+    /// messages left behind by other hosts.
+    /// </summary>
+    public TimeSpan PollInterval { get; set; } = TimeSpan.FromMinutes( 1 );
 
     /// <summary>
     /// How long a message is left to whoever claimed it, the committing unit of work included, before a

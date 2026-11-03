@@ -173,4 +173,78 @@ public class OutboxDispatcherTests( SqlServerFixture sqlServer )
         await dispatcher.StopAsync( CancellationToken.None );
         Assert.Single( harness.Publisher.Published );
     }
+
+    [ Fact ]
+    public async Task ExecuteAsync_PublishFailsAtCommit_RetriesWhenTheBackoffRunsOutNotAtThePoll()
+    {
+        await using var harness = await OutboxHarness.CreateAsync( sqlServer, new() { [ "Outbox:PollInterval" ] = "01:00:00" } );
+        var dispatcher = harness.Dispatcher< SalesContext >();
+        await dispatcher.StartAsync( CancellationToken.None );
+        // Let it find the table empty and go to sleep for the whole poll interval.
+        await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+
+        harness.Publisher.Failure = () => new InvalidOperationException( "handler is down" );
+        var placed = Assert.Single( await harness.PlaceOrdersAsync< SalesContext >() );
+        harness.Publisher.Failure = null;
+        harness.Time.Advance( harness.Options.FirstRetryDelay + TimeSpan.FromSeconds( 1 ) );
+
+        var published = await WaitForAsync( () => harness.Publisher.Published.Count == 1 );
+        await dispatcher.StopAsync( CancellationToken.None );
+        Assert.True( published, "the dispatcher was not woken when the retry fell due" );
+        Assert.Equal( placed.Id, Assert.Single( harness.Publisher.Published ).Id );
+    }
+
+    [ Fact ]
+    public async Task ExecuteAsync_MessageLeftBehindBeforeItStarted_RetriesItWhenItFallsDue()
+    {
+        await using var harness = await OutboxHarness.CreateAsync( sqlServer, new() { [ "Outbox:PollInterval" ] = "01:00:00" } );
+        harness.Publisher.Failure = () => new InvalidOperationException( "handler is down" );
+        await harness.PlaceOrdersAsync< SalesContext >();
+        harness.Publisher.Failure = null;
+        var dispatcher = harness.Dispatcher< SalesContext >();
+
+        await dispatcher.StartAsync( CancellationToken.None );
+        await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+        Assert.Empty( harness.Publisher.Published );
+
+        harness.Time.Advance( harness.Options.FirstRetryDelay + TimeSpan.FromSeconds( 1 ) );
+        var published = await WaitForAsync( () => harness.Publisher.Published.Count == 1 );
+        await dispatcher.StopAsync( CancellationToken.None );
+        Assert.True( published, "the dispatcher did not wake when the message fell due" );
+    }
+
+    [ Fact ]
+    public async Task ExecuteAsync_MoreMessagesThanABatch_DispatchesThemAllWithoutWaiting()
+    {
+        await using var harness = await OutboxHarness.CreateAsync( sqlServer,
+                                                                   new()
+                                                                   {
+                                                                       [ "Outbox:PollInterval" ] = "01:00:00",
+                                                                       [ "Outbox:BatchSize" ] = "5"
+                                                                   } );
+        harness.Publisher.Failure = () => new InvalidOperationException( "handler is down" );
+        await harness.PlaceOrdersAsync< SalesContext >( 12 );
+        harness.Publisher.Failure = null;
+        harness.Time.Advance( TimeSpan.FromMinutes( 1 ) );
+        var dispatcher = harness.Dispatcher< SalesContext >();
+
+        await dispatcher.StartAsync( CancellationToken.None );
+        var published = await WaitForAsync( () => harness.Publisher.Published.Count == 12 );
+        await dispatcher.StopAsync( CancellationToken.None );
+
+        Assert.True( published, $"published {harness.Publisher.Published.Count} of 12" );
+    }
+
+    private static async Task< bool > WaitForAsync( Func< bool > condition )
+    {
+        for ( var i = 0; i < 100; i++ )
+        {
+            if ( condition() )
+                return true;
+
+            await Task.Delay( 100 );
+        }
+
+        return condition();
+    }
 }

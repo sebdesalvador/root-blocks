@@ -72,9 +72,12 @@ The transactional outbox guarantees that an event is published if, and only if, 
 
 1. **Commit.** In the same `SaveChanges` as the change, the unit of work writes one `OutboxMessage` per domain event and clears the events from the entities. The message is locked for `LockDuration` so that no dispatcher takes it while the request is still publishing it.
 2. **Publish straight away.** After the commit, the unit of work publishes each event and marks its message processed. A failure, a timeout included, is never thrown to the caller, since the change is already committed: it increments `Attempts`, stores the exception in `LastError`, and holds the message back for an exponential delay (`FirstRetryDelay`, doubling up to `MaxRetryDelay`) by setting `LockedUntil`. The outcome is saved with `CancellationToken.None`. Only the caller's own cancellation stops publishing; it then throws `OperationCanceledException`, and what is left is published by the dispatcher.
-3. **Dispatch the rest.** `OutboxDispatcher< TContext >` polls every `PollInterval`. It takes up to `BatchSize` messages, oldest first, that are not processed, not locked and under `MaxAttempts`. It claims each one with a conditional `UPDATE` on `LockedUntil` and skips it if another host got there first, then publishes it and records the outcome as above. Then it deletes the messages processed more than `Retention` ago. An exception is logged and the dispatcher carries on at the next tick.
+3. **Dispatch the rest.** `OutboxDispatcher< TContext >` takes up to `BatchSize` messages, oldest first, that are not processed, not locked and under `MaxAttempts`. It claims each one with a conditional `UPDATE` on `LockedUntil` and skips it if another host got there first, then publishes it and records the outcome as above. Then it deletes the messages processed more than `Retention` ago. An exception is logged and the dispatcher tries again after `PollInterval`.
+4. **Sleep until something is due.** The dispatcher does not tick at a fixed rate. If the batch was full it goes again straight away. Otherwise it reads the earliest `LockedUntil` of the messages still to publish and sleeps until then, so a retry runs when its backoff runs out and a message whose request crashed is taken over when its lock expires. When a publish in the same process leaves a message behind, `OutboxPublisher` wakes the dispatcher through the singleton `OutboxSignal` with the new due time. `PollInterval` only caps the sleep: it bounds how late the dispatcher notices a message left behind by another host. A dispatcher with nothing to do runs one cheap query per `PollInterval`.
 
 No database feature beyond plain SQL is needed: no SQL Server Service Broker, so it runs on Azure SQL, Azure SQL Edge and containers.
+
+If you write outbox messages that the unit of work does not publish, for instance in a transaction opened on the context directly, call `OutboxSignal.Notify( context, dueAt )` after the commit to have them dispatched at `dueAt` rather than at the next poll.
 
 ### Delivery is at least once
 
@@ -100,14 +103,14 @@ services.AddOutbox< BillingContext >( configuration );
 
 `ApplyOutbox()` works on any `ModelBuilder`, not only in a `DatabaseContext`. It maps an `Outbox` table (pass another name as its argument) into the model's default schema, so `HasDefaultSchema( "billing" )` gives `billing.Outbox`. Add a migration afterwards.
 
-`AddOutbox< TContext >( configuration )` registers `OutboxOptions` from the `Outbox` section, `TimeProvider.System` (unless one is registered), the scoped `OutboxPublisher` and the `OutboxDispatcher< TContext >` hosted service. An `IEventPublisher` must be registered too, for instance with `AddMessaging()`.
+`AddOutbox< TContext >( configuration )` registers `OutboxOptions` from the `Outbox` section, `TimeProvider.System` (unless one is registered), the singleton `OutboxSignal`, the scoped `OutboxPublisher` and the `OutboxDispatcher< TContext >` hosted service. An `IEventPublisher` must be registered too, for instance with `AddMessaging()`.
 
 ### Options
 
 ```json
 {
   "Outbox": {
-    "PollInterval": "00:00:05",
+    "PollInterval": "00:01:00",
     "LockDuration": "00:01:00",
     "FirstRetryDelay": "00:00:05",
     "MaxRetryDelay": "00:15:00",
@@ -120,13 +123,13 @@ services.AddOutbox< BillingContext >( configuration );
 
 | Option | Default | Meaning |
 |--------|---------|---------|
-| `PollInterval` | 5 s | How often the dispatcher looks for messages. |
+| `PollInterval` | 1 min | The longest the dispatcher sleeps between two looks at the table. It wakes earlier when a message falls due or this process leaves one behind, so this only bounds how late it finds messages left behind by other hosts. |
 | `LockDuration` | 1 min | How long a claimed message is left to whoever claimed it, the committing request included. Keep it above your slowest handler. |
 | `FirstRetryDelay` | 5 s | Wait before the first retry; each further failure doubles it. |
 | `MaxRetryDelay` | 15 min | The longest wait between two retries. |
 | `MaxAttempts` | 100 | After this many failures a message is no longer retried and waits for a human. With the default delays that is about a day. |
 | `Retention` | 7 days | How long processed messages are kept. |
-| `BatchSize` | 20 | Messages per dispatcher tick. |
+| `BatchSize` | 20 | Messages per dispatcher run. A full batch is followed by another one straight away. |
 
 The options are shared by every context. Time comes from the registered `TimeProvider`, so tests can replace it with `FakeTimeProvider`.
 
