@@ -18,7 +18,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/solution files/pipelines/">
-    <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/release.yml" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/RootBlocks.AspNetCore.OpenApi/RootBlocks.AspNetCore.OpenApi.csproj" />

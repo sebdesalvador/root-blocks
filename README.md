@@ -1,7 +1,7 @@
 # RootBlocks
 
 [![NuGet](https://img.shields.io/nuget/v/RootBlocks.svg?label=RootBlocks)](https://www.nuget.org/packages/RootBlocks)
-[![publish](https://github.com/sebdesalvador/root-blocks/actions/workflows/publish.yml/badge.svg)](https://github.com/sebdesalvador/root-blocks/actions/workflows/publish.yml)
+[![release](https://github.com/sebdesalvador/root-blocks/actions/workflows/release.yml/badge.svg)](https://github.com/sebdesalvador/root-blocks/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 RootBlocks is a set of .NET packages that provide the building blocks of Domain-Driven Design (DDD). It covers entities, aggregate roots, value objects, enumeration classes, domain events, a unit of work with a transactional outbox, and persistence helpers for Entity Framework Core and raw SQL. You write the business rules and RootBlocks handles the repetitive parts.
