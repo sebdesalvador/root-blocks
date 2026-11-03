@@ -186,9 +186,9 @@ public class OutboxDispatcherTests( SqlServerFixture sqlServer )
         harness.Publisher.Failure = () => new InvalidOperationException( "handler is down" );
         var placed = Assert.Single( await harness.PlaceOrdersAsync< SalesContext >() );
         harness.Publisher.Failure = null;
-        harness.Time.Advance( harness.Options.FirstRetryDelay + TimeSpan.FromSeconds( 1 ) );
+        harness.Time.Advance( harness.Options.FirstRetryDelay );
 
-        var published = await WaitForAsync( () => harness.Publisher.Published.Count == 1 );
+        var published = await AdvanceUntilAsync( harness, () => harness.Publisher.Published.Count == 1 );
         await dispatcher.StopAsync( CancellationToken.None );
         Assert.True( published, "the dispatcher was not woken when the retry fell due" );
         Assert.Equal( placed.Id, Assert.Single( harness.Publisher.Published ).Id );
@@ -207,8 +207,8 @@ public class OutboxDispatcherTests( SqlServerFixture sqlServer )
         await Task.Delay( TimeSpan.FromSeconds( 2 ) );
         Assert.Empty( harness.Publisher.Published );
 
-        harness.Time.Advance( harness.Options.FirstRetryDelay + TimeSpan.FromSeconds( 1 ) );
-        var published = await WaitForAsync( () => harness.Publisher.Published.Count == 1 );
+        harness.Time.Advance( harness.Options.FirstRetryDelay );
+        var published = await AdvanceUntilAsync( harness, () => harness.Publisher.Published.Count == 1 );
         await dispatcher.StopAsync( CancellationToken.None );
         Assert.True( published, "the dispatcher did not wake when the message fell due" );
     }
@@ -233,6 +233,26 @@ public class OutboxDispatcherTests( SqlServerFixture sqlServer )
         await dispatcher.StopAsync( CancellationToken.None );
 
         Assert.True( published, $"published {harness.Publisher.Published.Count} of 12" );
+    }
+
+    /// <summary>
+    /// Moves the fake clock on a second at a time until <paramref name="condition" /> holds, for at most 100 s,
+    /// far short of the one-hour poll interval. A single jump is racy: the dispatcher reads the clock to work
+    /// out its delay, then starts a timer that counts from the clock as it is then, so a jump landing between
+    /// the two leaves the timer a full delay in the future.
+    /// </summary>
+    private static async Task< bool > AdvanceUntilAsync( OutboxHarness harness, Func< bool > condition )
+    {
+        for ( var i = 0; i < 100; i++ )
+        {
+            if ( condition() )
+                return true;
+
+            harness.Time.Advance( TimeSpan.FromSeconds( 1 ) );
+            await Task.Delay( 100 );
+        }
+
+        return condition();
     }
 
     private static async Task< bool > WaitForAsync( Func< bool > condition )
