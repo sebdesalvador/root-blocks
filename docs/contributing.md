@@ -60,6 +60,6 @@ The [`release`](../.github/workflows/release.yml) workflow runs on every pull re
 
 Publishing uses [NuGet trusted publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing): there is no API key secret. The `deploy` job runs in the `nuget` environment with `id-token: write`, and `NuGet/login` exchanges GitHub's OIDC token for a short-lived nuget.org key. The trusted publisher policy on nuget.org names the `sebdesalvador/root-blocks` repository, the `release.yml` workflow file and the `nuget` environment; renaming the workflow or the environment breaks publishing until the policy is updated to match.
 
-To release, tag the commit (`v1.2.3`) and publish a GitHub Release from that tag. Publishing the release uploads the packages to nuget.org, and that upload cannot be undone (packages can only be unlisted).
+To release, tag the commit (`v1.2.3`, with the `v`: MinVer ignores other tags, and `deploy` refuses to push packages whose version does not match the tag) and publish a GitHub Release from that tag. Publishing the release uploads the packages to nuget.org, and that upload cannot be undone (packages can only be unlisted).
 
 When you add a new package, add it to the matrix in `release.yml`, to `RootBlocks.slnx`, to the package table in the [README](../README.md), to [Target frameworks](target-frameworks.md) and to the [Configuration reference](configuration.md), and give it a page under `docs/packages/` linked from [docs/README.md](README.md).

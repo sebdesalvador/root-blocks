@@ -96,10 +96,20 @@ jobs:
           merge-multiple: true
           path: ${{ env.NuGetDirectory }}
 
+      # No checkout in this job, so there is no global.json to read: any SDK can push packages.
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: global.json
+
+      # MinVer only reads tags prefixed with v. A release tagged 0.8.0 packs as 0.7.1-alpha.0.N, and
+      # publishing that by mistake cannot be undone, so stop unless every package carries the tag's version.
+      - name: Check the packages match the release tag
+        run: |
+          $tag = "${{ github.event.release.tag_name }}"
+          if (-not ($tag -match '^v(\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?)$')) { throw "Release tag '$tag' must look like v1.2.3: MinVer ignores tags without the v prefix" }
+          $version = $Matches[1]
+          $files = @(Get-ChildItem "${{ env.NuGetDirectory }}" -Filter *.nupkg)
+          $wrong = @($files | Where-Object { -not $_.Name.EndsWith(".$version.nupkg") })
+          if ($files.Count -eq 0 -or $wrong.Count -gt 0) { throw "Packages do not match version ${version}: $($wrong.Name -join ', ')" }
 
       # Trusted publishing: no stored secret. The policy on nuget.org names this repo, release.yml
       # and the nuget environment; any mismatch and the token exchange is refused.
