@@ -73,6 +73,15 @@ public class OutboxDispatcher< TContext > : BackgroundService
     {
         using var subscription = _signal?.Subscribe( typeof( TContext ), WakeAt );
 
+        try
+        {
+            await SleepUntilAsync( UtcNow() + _options.StartupDelay, stoppingToken );
+        }
+        catch ( OperationCanceledException ) when ( stoppingToken.IsCancellationRequested )
+        {
+            return;
+        }
+
         while ( !stoppingToken.IsCancellationRequested )
         {
             DateTime next;

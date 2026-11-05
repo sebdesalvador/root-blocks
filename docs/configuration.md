@@ -58,7 +58,7 @@ services.AddScoped< IExecutionContext, MyExecutionContext >();
 | `ASPNETCORE_ENVIRONMENT` | `DesignTimeDatabaseContextFactory<T>` | Selects the environment-specific `appsettings` file. |
 | `AzureAnalyticsWorkspaceId`, `AzureAnalyticsAuthenticationId`, `AzureAnalyticsLogName` | `AddDefaultLogging` | Azure Log Analytics sink. |
 | `AZURE_FUNCTIONS_ENVIRONMENT` | `AddDefaultLogging` | Becomes the `EnvironmentName` log property. |
-| `Outbox:PollInterval`, `LockDuration`, `FirstRetryDelay`, `MaxRetryDelay`, `MaxAttempts`, `Retention`, `BatchSize` | `AddOutbox< TContext >` | See [outbox options](packages/entity-framework.md#options). |
+| `Outbox:PollInterval`, `StartupDelay`, `LockDuration`, `FirstRetryDelay`, `MaxRetryDelay`, `MaxAttempts`, `Retention`, `BatchSize` | `AddOutbox< TContext >` | See [outbox options](packages/entity-framework.md#options). |
 
 ## MSBuild properties
 

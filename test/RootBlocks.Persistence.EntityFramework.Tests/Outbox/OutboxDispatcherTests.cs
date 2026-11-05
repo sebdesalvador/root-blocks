@@ -235,6 +235,55 @@ public class OutboxDispatcherTests( SqlServerFixture sqlServer )
         Assert.True( published, $"published {harness.Publisher.Published.Count} of 12" );
     }
 
+    [ Fact ]
+    public async Task ExecuteAsync_StartupDelay_LeavesTheTableAloneUntilItRunsOut()
+    {
+        await using var harness = await OutboxHarness.CreateAsync( sqlServer,
+                                                                   new()
+                                                                   {
+                                                                       [ "Outbox:PollInterval" ] = "01:00:00",
+                                                                       [ "Outbox:StartupDelay" ] = "00:10:00"
+                                                                   } );
+        harness.Publisher.Failure = () => new InvalidOperationException( "handler is down" );
+        await harness.PlaceOrdersAsync< SalesContext >();
+        harness.Publisher.Failure = null;
+        harness.Time.Advance( harness.Options.FirstRetryDelay );
+        var dispatcher = harness.Dispatcher< SalesContext >();
+
+        await dispatcher.StartAsync( CancellationToken.None );
+        await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+        Assert.Empty( harness.Publisher.Published );
+
+        harness.Time.Advance( harness.Options.StartupDelay - TimeSpan.FromSeconds( 5 ) );
+        var published = await AdvanceUntilAsync( harness, () => harness.Publisher.Published.Count == 1 );
+        await dispatcher.StopAsync( CancellationToken.None );
+        Assert.True( published, "the dispatcher did not look at the table once the startup delay ran out" );
+    }
+
+    [ Fact ]
+    public async Task ExecuteAsync_StartupDelay_WakesEarlyWhenThisProcessLeavesAMessageBehind()
+    {
+        await using var harness = await OutboxHarness.CreateAsync( sqlServer,
+                                                                   new()
+                                                                   {
+                                                                       [ "Outbox:PollInterval" ] = "01:00:00",
+                                                                       [ "Outbox:StartupDelay" ] = "01:00:00"
+                                                                   } );
+        var dispatcher = harness.Dispatcher< SalesContext >();
+        await dispatcher.StartAsync( CancellationToken.None );
+        await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+
+        harness.Publisher.Failure = () => new InvalidOperationException( "handler is down" );
+        var placed = Assert.Single( await harness.PlaceOrdersAsync< SalesContext >() );
+        harness.Publisher.Failure = null;
+        harness.Time.Advance( harness.Options.FirstRetryDelay );
+
+        var published = await AdvanceUntilAsync( harness, () => harness.Publisher.Published.Count == 1 );
+        await dispatcher.StopAsync( CancellationToken.None );
+        Assert.True( published, "the dispatcher slept through the startup delay instead of being woken" );
+        Assert.Equal( placed.Id, Assert.Single( harness.Publisher.Published ).Id );
+    }
+
     /// <summary>
     /// Moves the fake clock on a second at a time until <paramref name="condition" /> holds, for at most 100 s,
     /// far short of the one-hour poll interval. A single jump is racy: the dispatcher reads the clock to work

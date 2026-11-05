@@ -22,6 +22,14 @@ public class OutboxOptions
     public TimeSpan PollInterval { get; set; } = TimeSpan.FromMinutes( 1 );
 
     /// <summary>
+    /// How long <see cref="OutboxDispatcher{TContext}" /> waits after the host starts before its first look at the
+    /// table. <see cref="OutboxSignal" /> still wakes it earlier when this process leaves a message behind. Zero, the
+    /// default, looks straight away; a longer delay keeps a host that starts to serve one request from touching the
+    /// database for nothing, which matters when that database pauses while idle and bills each resume.
+    /// </summary>
+    public TimeSpan StartupDelay { get; set; } = TimeSpan.Zero;
+
+    /// <summary>
     /// How long a message is left to whoever claimed it, the committing unit of work included, before a
     /// dispatcher may take it over.
     /// </summary>

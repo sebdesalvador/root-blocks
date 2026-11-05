@@ -111,6 +111,7 @@ services.AddOutbox< BillingContext >( configuration );
 {
   "Outbox": {
     "PollInterval": "00:01:00",
+    "StartupDelay": "00:00:00",
     "LockDuration": "00:01:00",
     "FirstRetryDelay": "00:00:05",
     "MaxRetryDelay": "00:15:00",
@@ -124,6 +125,7 @@ services.AddOutbox< BillingContext >( configuration );
 | Option | Default | Meaning |
 |--------|---------|---------|
 | `PollInterval` | 1 min | The longest the dispatcher sleeps between two looks at the table. It wakes earlier when a message falls due or this process leaves one behind, so this only bounds how late it finds messages left behind by other hosts. |
+| `StartupDelay` | 0 | How long the dispatcher waits after the host starts before its first look at the table. A publish in this process that leaves a message behind still wakes it earlier. Set it when the database pauses while idle (Azure SQL serverless) and hosts scale from zero, so a host started for one request does not resume the database on its own. |
 | `LockDuration` | 1 min | How long a claimed message is left to whoever claimed it, the committing request included. Keep it above your slowest handler. |
 | `FirstRetryDelay` | 5 s | Wait before the first retry; each further failure doubles it. |
 | `MaxRetryDelay` | 15 min | The longest wait between two retries. |
